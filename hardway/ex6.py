@@ -1,0 +1,23 @@
+peopleTypeCount = 10
+
+x = f"There are {peopleTypeCount} types of people."
+
+binary = "binary"
+doNot = "don't"
+y = f"Those who know {binary} and those who {doNot}."
+
+print(x)
+print(y)
+
+print(f"I said: {x}")
+print(f"I also said: '{y}'")
+
+hilarious = False
+jokeEvaluation = "Isn't that joke so funny?! {}"
+
+print(jokeEvaluation.format(hilarious))
+
+w = "This is the left side of..."
+e = "a string with a right side."
+
+print(w + e)
