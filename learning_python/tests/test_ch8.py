@@ -48,6 +48,8 @@ class TestList(unittest.TestCase):
         L.insert(1, 1.5) # [1, 1.5, 2,3,4]
         self.assertEqual(L[1], 1.5)
 
+        self.assertEqual(L.index(1.5), 1)
+
 
 
 

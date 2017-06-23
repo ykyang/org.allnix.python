@@ -1,8 +1,16 @@
-Sample Module Repository
-========================
+Learning Python
+===============
+Follow the book Learning Pyghon to learn Python.  Most codes are in tests/.
 
-python -m unittest
 
-This simple project is an example repo for Python projects.
+Test
+----
+.. code-block:: python
 
-`Learn more <http://www.kennethreitz.org/essays/repository-structure-and-python>`_.
+    python -m unittet
+
+or simply
+.. code-block:: sh
+
+    make test
+
