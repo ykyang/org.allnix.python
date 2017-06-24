@@ -1,10 +1,11 @@
 Learning Python
 ===============
-Follow the book Learning Pyghon to learn Python.  Most codes are in tests/.
+Follow the book Learning Pyghon to learn Python.  Most codes are in :code:`tests/`.
 
 Load Python
 -----------
 Initialize Python environment
+
 .. code-block:: bash
 
     module add conda
@@ -14,11 +15,11 @@ Initialize Sphinx
 -----------------
 In the root directory of a Python project,
 
-.. code-block:: Python
+.. code-block:: bash
 
     sphinx-quickstart
 
-.. code-block:: bash
+.. code-block:: text
 
     Enter the root path for documentation.
     > Root path for the documentation [.]: docs
@@ -38,6 +39,7 @@ In the root directory of a Python project,
     > Create Windows command file? (y/n) [y]:
 
 Add an :code:`html` task to the :code:`Makefile` in the project root directory
+
 .. code-block:: makefile
 
     html:
@@ -45,6 +47,7 @@ Add an :code:`html` task to the :code:`Makefile` in the project root directory
 	    make -C docs html
 
 Modify :code:`conf.py` to enable
+
 .. code-block:: python
 
     import os
@@ -53,26 +56,30 @@ Modify :code:`conf.py` to enable
 
 In the next step, we link :code:`README.rst` to Sphinx documentation.
 Create :code:`docs/readme.rst` with the following content
+
 .. code-block:: rst
 
     .. include:: ../README.rst
 
 Modify :code:`docs/index.rst`
+
 .. code-block:: rst
 
-    .. toctree::
-   :maxdepth: 2
-   :caption: Contents:
+    .. toctree:: rst
+        :maxdepth: 2
+        :caption: Contents:
 
-   readme
+        readme  # Not necessary
+        modules  # Not necessary, just to shut the warning up
 
 Test
 ----
-.. code-block:: python
+.. code-block:: bash
 
     python -m unittet
 
 or simply
+
 .. code-block:: sh
 
     make test

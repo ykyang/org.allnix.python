@@ -7,3 +7,6 @@ test:
 html:
 	sphinx-apidoc -o docs . tests setup.py
 	make -C docs html
+
+clean:
+	make -C docs clean
