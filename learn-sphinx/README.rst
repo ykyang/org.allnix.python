@@ -1,6 +1,14 @@
-Sample Module Repository
-========================
+Sphinx Documentation
+====================
 
-This simple project is an example repo for Python projects.
+.. code-block:: bash
 
-`Learn more <http://www.kennethreitz.org/essays/repository-structure-and-python>`_.
+    sphinx-quickstart
+
+Edit docs/conf.py to enable
+.. code-block:: python
+
+    import os
+    import sys
+    sys.path.insert(0, os.path.abspath('..'))
+

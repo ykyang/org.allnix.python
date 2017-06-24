@@ -1,6 +1,6 @@
-"""A pypi demonstration vehicle.
+"""A sample module
 
-.. moduleauthor::
+.. moduleauthor:: Yi-Kun Yang
 
 """
 from .core import hmm
