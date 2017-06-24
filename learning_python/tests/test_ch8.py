@@ -2,55 +2,142 @@ import unittest
 
 
 class TestList(unittest.TestCase):
-    """Learn basic list operation"""
+    """Learn basic list operations"""
 
     def test(self):
-        L = []
-        self.assertEqual(len(L), 0)
-        L = [123, 'abc', 1.23, {}]
-        self.assertEqual(L[3], {})
+        lst = []
+        self.assertEqual(len(lst), 0)
+        lst = [123, 'abc', 1.23, {}]
+        self.assertEqual(lst[3], {})
 
-        L = ['Bob', 40.0, ['dev', 'mgr']]
-        self.assertEqual(type(L[2]), type([]))
-        self.assertEqual(L[2][1], 'mgr')
+        lst = ['Bob', 40.0, ['dev', 'mgr']]
+        self.assertEqual(type(lst[2]), type([]))
+        self.assertEqual(lst[2][1], 'mgr')
 
-        L = list('spam')  # L = ['s', 'p', 'a', 'm']
-        self.assertEqual(L[0], 's')
-        self.assertEqual(L[3], 'm')
+        lst = list('spam')  # L = ['s', 'p', 'a', 'm']
+        self.assertEqual(lst[0], 's')
+        self.assertEqual(lst[3], 'm')
 
-        L = list(range(1, 5))  # L = [1, 2, 3, 4]
-        self.assertEqual(L[0], 1)
-        self.assertEqual(L[3], 4)
-        self.assertEqual(len(L), 4)
+        lst = list(range(1, 5))  # L = [1, 2, 3, 4]
+        self.assertEqual(lst[0], 1)
+        self.assertEqual(lst[3], 4)
+        self.assertEqual(len(lst), 4)
 
-        L1 = list(range(1,6))
-        L2 = list(range(6,11))
-        L = L1 + L2  # L = [1, ..., 10]
-        self.assertEqual(len(L), 10)
-        self.assertEqual(L[9], 10)
+        l1 = list(range(1,6))
+        lst2 = list(range(6,11))
+        lst = l1 + lst2  # L = [1, ..., 10]
+        self.assertEqual(len(lst), 10)
+        self.assertEqual(lst[9], 10)
 
-        L = L*3
-        self.assertEqual(len(L), 30)
+        lst = lst*3
+        self.assertEqual(len(lst), 30)
 
         # for x in L: do something
 
-        L = [1,2,3]
-        self.assertTrue(3 in L)
-        L = []
-        self.assertFalse(3 in L)
+        # - Reverse range - #
+        lst = list(range(5, 0, -1))
+        # print(L)  # [5, 4, 3, 2, 1]
+        self.assertEqual(lst[0], 5)
+        self.assertEqual(lst[4], 1)
 
-        L.append(1) # [1]
-        self.assertEqual(L[0], 1)
+        # -  in  - #
+        lst = [1,2,3]
+        self.assertTrue(3 in lst)
+        lst = []
+        self.assertFalse(3 in lst)
 
-        L.extend([2,3,4]) # [1,2,3,4]
-        self.assertEqual(L[3],4)
+        # -  append()  - #
+        lst.append(1) # [1]
+        self.assertEqual(lst[0], 1)
 
-        L.insert(1, 1.5) # [1, 1.5, 2,3,4]
-        self.assertEqual(L[1], 1.5)
+        # - extend() - #
+        lst.extend([2,3,4]) # [1,2,3,4]
+        self.assertEqual(lst[3],4)
 
-        self.assertEqual(L.index(1.5), 1)
+        # - insert() - #
+        lst.insert(1, 1.5) # [1, 1.5, 2,3,4]
+        self.assertEqual(lst[1], 1.5)
 
+        # - [].index(i) - #
+        self.assertEqual(lst.index(1.5), 1)
 
+        # - index out of bound error - #
+        with self.assertRaises(ValueError):
+            [].index(1)
 
+        # - count() - #
+        lst = [1,1,1]
+        self.assertEqual(lst.count(1), 3)
 
+        # - sort() - #
+        lst = list(range(5, 0, -1))  # [5, 4, 3, 2, 1]
+        lst.sort()
+        self.assertEqual(lst[0], 1)
+
+        # - reverse() - #
+        lst = list(range(1,6))  # [1, 2, 3, 4, 5]
+        lst.reverse()  # [5, 4, 3, 2, 1]
+        self.assertEqual(lst[0], 5)
+
+        # - copy() -> shallow copy of object
+        # - but primitive types are copied
+        lst = list(range(1,6))  # [1, 2, 3, 4, 5]
+        lst2 = lst.copy()
+        self.assertEqual(lst2[0], 1)
+        lst[0] = 2  # primitive types
+        self.assertEqual(lst2[0], 1)
+
+        lst = list(range(1, 6))  # [1, 2, 3, 4, 5]
+        lst2 = lst  # point to the same list
+        self.assertEqual(lst2[0], 1)
+        lst[0] = 2  # Change L changes L2
+        self.assertEqual(lst2[0], 2)
+
+        # - clear() - #
+        lst = list(range(1, 6))  # [1, 2, 3, 4, 5]
+        lst.clear()
+        self.assertEqual(len(lst), 0)
+
+        # - pop() - #
+        lst = list(range(1, 6))  # [1, 2, 3, 4, 5]
+        self.assertEqual(lst.pop(), 5)
+        self.assertEqual(lst.pop(0), 1)
+
+        # - remove() instances not index - #
+        lst = [1,1,1]
+        lst.remove(1)  # remove the first of 1
+        self.assertEqual(len(lst), 2)
+
+        # - del - #
+        lst = list(range(1, 6))  # [1, 2, 3, 4, 5]
+        del lst[2]  # -> [1, 2, 4, 5]
+        self.assertEqual(len(lst), 4)
+        self.assertEqual(lst[2], 4)
+
+        # - Notice the index range is [i,j) - #
+        del lst[1:3]  # -> [1, 5]
+        self.assertEqual(len(lst), 2)
+        self.assertEqual(lst[1], 5)
+
+        # - Replace a range of values
+        # - with another list
+        lst = list(range(1, 6))  # [1, 2, 3, 4, 5]
+        lst[1:3] = []  # -> [1, 4, 5]
+
+        lst = list(range(1, 6))  # [1, 2, 3, 4, 5]
+        lst[1:3] = [0]  # -> [1, 0, 4, 5]
+
+        lst = list(range(1, 6))  # [1, 2, 3, 4, 5]
+        lst[1:3] = [10, 11, 12]  # -> [1, 10, 11, 12, 4, 5]
+
+        # - list comprehensions - #
+        lst = [x*2 for x in range(5)]  # [0, 1, 2, 3, 4]
+        self.assertEqual(len(lst), 5)
+        self.assertEqual(lst[4], 4*2)
+
+        # - map, not the kind of map in C++ - #
+        lst = list(map(ord, 'spam'))  # [115, 112, 97, 109]
+        lst = list(map(lambda x: 2*x, range(1,6)))  # [2, 4, 6, 8, 10]
+        self.assertEqual(len(lst), 5)
+        self.assertEqual(lst[4], 2*5)
 

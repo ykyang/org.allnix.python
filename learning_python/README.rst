@@ -74,11 +74,13 @@ Modify :code:`docs/index.rst`
 
 Test
 ----
+Run with :code:`unittest` which will print to the console
+
 .. code-block:: bash
 
     python -m unittet
 
-or simply
+or using :code:`nosetest` which will not print to the console unless there is error.
 
 .. code-block:: sh
 
