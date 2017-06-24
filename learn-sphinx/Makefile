@@ -5,5 +5,5 @@ test:
 	nosetests tests
 
 html:
-	sphinx-apidoc -f -o docs . tests setup.py
+	sphinx-apidoc -o docs . tests setup.py
 	make -C docs html
