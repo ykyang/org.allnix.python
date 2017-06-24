@@ -1,4 +1,12 @@
-# -*- coding: utf-8 -*-
+"""
+.. module:: useful_1
+   :platform: Unix, Windows
+   :synopsis: A useful module indeed.
+
+.. moduleauthor:: Andrew Carter <andrew@invalid.com>
+
+
+"""
 from . import helpers
 
 def get_hmm():
