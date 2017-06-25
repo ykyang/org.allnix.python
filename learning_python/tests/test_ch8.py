@@ -143,6 +143,11 @@ class TestList(unittest.TestCase):
 
 class TestDictionary(unittest.TestCase):
     """Learn basic dict operations"""
+
+    @staticmethod
+    def dictionary(self):
+        return {'name': 'Bob', 'age': 40}
+
     def test(self):
         dic = {}
         self.assertEqual(len(dic), 0)
@@ -243,3 +248,34 @@ class TestDictionary(unittest.TestCase):
             dic.pop('name')
 
         # - setdefault - #
+        # - sets key does not exist
+        dic = {}
+        ans = dic.setdefault('name', 'Smith')  # -> ans = 'Smith'
+        self.assertEqual(ans, 'Smith')
+        # - sets key that existed
+        dic = {'name': 'Bob', 'age': 40}
+        ans = dic.setdefault('name', 'Smith')  # -> ans = 'Bob'
+        self.assertEqual(ans, 'Bob')
+
+        # - popitem() - #
+        dic ={}
+        # - pop empty dict
+        with self.assertRaises(KeyError):
+            dic.popitem()
+        # - pop one item
+        dic = {'name': 'Bob', 'age': 40}
+        ans = dic.popitem()
+        self.assertEqual(len(dic), 1)
+
+        # - del - #
+        dic = {'name': 'Bob', 'age': 40}
+        del dic['name']
+        self.assertFalse('name' in dic)
+
+        dic = {'name': 'Bob', 'age': 40}
+
+        # - comprehension - #
+        dic = {x: 2*x for x in range(1,11)}
+        self.assertEqual(len(dic), 10)
+        self.assertEqual(dic[10], 20)
+
