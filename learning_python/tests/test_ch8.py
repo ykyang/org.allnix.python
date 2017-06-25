@@ -141,3 +141,105 @@ class TestList(unittest.TestCase):
         self.assertEqual(len(lst), 5)
         self.assertEqual(lst[4], 2*5)
 
+class TestDictionary(unittest.TestCase):
+    """Learn basic dict operations"""
+    def test(self):
+        dic = {}
+        self.assertEqual(len(dic), 0)
+
+        dic = {'name':'Bob', 'age':40}
+        self.assertEqual(len(dic), 2)
+        self.assertEqual(dic['name'], 'Bob')
+
+        # - Non-existent keys - #
+        with self.assertRaises(KeyError):
+            dic['lalala']
+
+        # - nesting - #
+        dic = {'cto': {
+            'name':'Bob', 'age':40
+        }}
+        self.assertEqual(dic['cto']['name'], 'Bob')
+
+        # - constructor - #
+        dic = dict(name='Bob', age=40)
+        self.assertEqual(len(dic), 2)
+        self.assertEqual(dic['name'], 'Bob')
+
+        # - initialize by list of tuples - #
+        dic = dict([('name', 'Bob'), ('age', 40)])
+        self.assertEqual(len(dic), 2)
+        self.assertEqual(dic['name'], 'Bob')
+
+        # - zip it - #
+        dic = dict(zip(
+            ['name', 'age'],
+            ['Bob', 40]
+        ))
+        self.assertEqual(len(dic), 2)
+        self.assertEqual(dic['name'], 'Bob')
+
+        # - fromkeys - #
+        dic = dict.fromkeys(['name', 'age'])
+        self.assertIsNone(dic['name'])
+        self.assertIsNone(dic['age'])
+
+        # - in - #
+        dic = {'name': 'Bob', 'age': 40}
+        self.assertTrue('age' in dic)
+        for k in dic:  # k iterate through the keys
+            if k == 'name':
+                self.assertEqual(dic[k], 'Bob')
+
+        # - keys() - #
+        lst = list(dic.keys())
+        self.assertEqual(len(lst), 2)
+        self.assertEqual(lst[1], 'age')
+
+        # - values() - #
+        lst = list(dic.values())
+        self.assertEqual(len(lst), 2)
+        self.assertEqual(lst[1], 40)
+
+        # - items() - #
+        lst = list(dic.items())
+        self.assertEqual(len(lst), 2)
+        self.assertEqual(type(lst[1]), type(tuple()))
+        for item in dic.items():
+            key = item[0]
+            value = item[1]
+            self.assertEqual(dic[key], value)
+        # self.assertEqual(lst[1], ('age', 40))  # This is not necessary true
+
+        # - copy() - #
+        dic = {'name': 'Bob', 'age': 40}
+        dic2 = dic.copy()
+        self.assertEqual(dic, dic2)
+        dic2['name'] = 'Smith'
+        self.assertNotEqual(dic, dic2)
+
+        # - clear() - #
+        dic = {'name': 'Bob', 'age': 40}
+        dic.clear()
+        self.assertEqual(len(dic), 0)
+
+        # - update - #
+        dic = {'name': 'Bob', 'age': 40}
+        dic2 = {'name': 'Smith'}
+        dic.update(dic2)
+        self.assertEqual(dic['name'], 'Smith')
+
+        # - get - #
+        dic = {'name': 'Bob', 'age': 40}
+        self.assertEqual(dic.get('name'), 'Bob')
+        self.assertIsNone(dic.get('na'))
+
+        # - pop - #
+        dic = {'name': 'Bob', 'age': 40}
+        self.assertEqual(dic.pop('name'), 'Bob')
+
+        # - pop non-existent key - #
+        with self.assertRaises(KeyError):
+            dic.pop('name')
+
+        # - setdefault - #
