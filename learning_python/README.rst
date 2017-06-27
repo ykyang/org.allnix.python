@@ -2,6 +2,12 @@ Learning Python
 ===============
 Follow the book Learning Pyghon to learn Python.  Most codes are in :code:`tests/`.
 
+Setup Python Project
+--------------------
+I use the sample project structure from
+`Sample Module Repository <https://github.com/kennethreitz/samplemod>`_.  Download and unzip.
+
+
 Load Python
 -----------
 Initialize Python environment

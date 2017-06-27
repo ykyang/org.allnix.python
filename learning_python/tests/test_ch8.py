@@ -141,6 +141,7 @@ class TestList(unittest.TestCase):
         self.assertEqual(len(lst), 5)
         self.assertEqual(lst[4], 2*5)
 
+
 class TestDictionary(unittest.TestCase):
     """Learn basic dict operations"""
 
