@@ -1,16 +1,18 @@
+#import array as ay
 from array import *
 import time
+import numpy as np
 
 def loop():
     n = 1000000
-    count = 5
+    count = 1000
     a = 0.5
 
-    x = array('d', [0 for x in range(n)])
-    y = array('d', [0 for x in range(n)])
+    x = array('d', range(n))
+    y = array('d', range(n))
 
     for i in range(n):
-        x[i] = i
+        x[i] = 1
         y[i] = 1.0
 
     for j in range(count):
