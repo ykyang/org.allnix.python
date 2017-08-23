@@ -47,6 +47,28 @@ def numloop():
     print(y[n - 1])
     print(end - start)
 
+# From Luke
+def numpyloop():
+    n = 1000000
+    count = 1000
+    a = 0.5
+
+    x = np.arange(n, dtype=np.float64)
+    y = np.zeros(n, dtype=np.float64)
+    y.fill(1.0)
+
+    start = time.time()
+    for j in range(count):
+        y = a * x + y
+    end = time.time()
+
+    print(y[n - 1])
+    print(end - start)
+
+# Numpy axpy from Luke
+# count = 1000 -> 2.72672486305
+numpyloop()
+
 # Python array:
 # count = 10 -> 1.9 sec
 # count = 1000 -> 184.210150957 sec
