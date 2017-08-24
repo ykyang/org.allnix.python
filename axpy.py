@@ -70,8 +70,8 @@ def myfunc(x, y):
         y = x
 
 def cond():
-    n = 100
-    count = 10000000
+    n = 10000000
+    count = 100
     x = np.arange(n, dtype=np.float64)
 #    z = np.arange(n, dtype=np.float64)
     y = np.zeros(n, dtype=np.float64)
@@ -86,11 +86,13 @@ def cond():
 
 #    d = 1./13.
     start = time.time()
-    for j in xrange(count):
+    for j in range(count):
 #        y = x/13. + z - 10
-        y = x/13.
-        y += z
-        y -= 10
+        y = np.where(z < 1500., x/13. + z -10, x/13. + z +10)
+#        y = np.choose(z < 1500., [x/13. + z -10, x/13. + z +10])
+#        y = x/13.
+#        y += z
+#        y -= 10
 #        condlist = [z > 15., z <= 15.]
 #        choicelist = [x/13. + z -10., x/15. + z]
 #        y = np.select(condlist, choicelist)
@@ -122,7 +124,17 @@ def cond():
     print(y[n - 1])
     print(end - start)
 
+def arrr():
+    arr = np.arange(5)
+#    index = arr > 2
+    print(arr)
+    new_arr = np.where(arr > 2, arr+1, arr-1)
+#    new_arr = arr[index]
+    print(new_arr)
+    
 
+
+#arrr()
 cond()
 
 # Numpy axpy from Luke
