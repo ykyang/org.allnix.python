@@ -90,9 +90,9 @@ def run_xyz(x, y, z):
 
 
 def run_condition_index(x, y, z):
-    if_condition = z < 1500.
-    y[if_condition] = 19.
-    y[~if_condition] = 21.
+    b = z < 1500.
+    y[b] = x[b]/13. + z[b] - 10.
+    y[~b] = x[~b]/13. + z[~b] + 10.
 
     return x, y, z
 
