@@ -65,9 +65,119 @@ def numpyloop():
     print(y[n - 1])
     print(end - start)
 
+
 def myfunc(x, y):
     if x % 2 == 0:
         y = x
+
+
+def run_axpy(a, x, y):
+    y = a * x + y
+
+    return y
+
+
+def run_condition(x, y, z):
+    y = np.where(z < 1500., x / 13. + z - 10., x / 13. + z + 10.)
+
+    return x, y, z
+
+
+def run_xyz(x, y, z):
+    y = x/13. + z - 10
+
+    return x, y, z
+
+
+def run_condition_index(x, y, z):
+    if_condition = z < 1500.
+    y[if_condition] = 19.
+    y[~if_condition] = 21.
+
+    return x, y, z
+
+
+def test_condition_index():
+    n = 10000000
+    count = 100
+    x = np.arange(n, dtype=np.float64)
+    #    z = np.arange(n, dtype=np.float64)
+    y = np.zeros(n, dtype=np.float64)
+    z = np.zeros(n, dtype=np.float64)
+    # print(x)
+
+    for i in range(n):
+        x[i] = i
+        y[i] = 0.0
+        z[i] = 1.5 * (i + 2)
+
+    start = time.time()
+    for j in range(count):
+        x, y, z = run_condition_index(x, y, z)
+    end = time.time()
+
+    print("test_condition_index: %f, y = %f" % (end - start, y[n - 1]))
+
+
+def test_axpy():
+    n = 1000000
+    count = 1000
+    a = 0.5
+    x = np.arange(n, dtype=np.float64)
+    y = np.zeros(n, dtype=np.float64)
+    y.fill(1.0)
+
+    start = time.time()
+    for j in range(count):
+        y = run_axpy(a,x,y)
+    end = time.time()
+
+    print("test_axpy: %f, y = %f" % (end-start, y[n-1]))
+
+
+def test_condition():
+    n = 10000000
+    count = 100
+    x = np.arange(n, dtype=np.float64)
+    #    z = np.arange(n, dtype=np.float64)
+    y = np.zeros(n, dtype=np.float64)
+    z = np.zeros(n, dtype=np.float64)
+    # print(x)
+
+    for i in range(n):
+        x[i] = i
+        y[i] = 0.0
+        z[i] = 1.5 * (i + 2)
+
+    start = time.time()
+    for j in range(count):
+        x, y, z = run_condition(x, y, z)
+    end = time.time()
+
+    print("test_condition: %f, y = %f" % (end-start, y[n-1]))
+
+
+def test_xyz():
+    n = 10000000
+    count = 100
+    x = np.arange(n, dtype=np.float64)
+    #    z = np.arange(n, dtype=np.float64)
+    y = np.zeros(n, dtype=np.float64)
+    z = np.zeros(n, dtype=np.float64)
+    # print(x)
+
+    for i in range(n):
+        x[i] = i
+        y[i] = 0.0
+        z[i] = 1.5 * (i + 2)
+
+    start = time.time()
+    for j in range(count):
+        x, y, z = run_xyz(x, y, z)
+    end = time.time()
+
+    print("test_xyz: %f, y = %f" % (end-start, y[n-1]))
+
 
 def cond():
     n = 10000000
@@ -135,7 +245,10 @@ def arrr():
 
 
 #arrr()
-cond()
+test_axpy()
+test_xyz()
+test_condition()
+test_condition_index()
 
 # Numpy axpy from Luke
 # count = 1000 -> 2.72672486305
