@@ -29,3 +29,8 @@ class PathTest(unittest.TestCase):
             self.assertTrue(path.exists())
             shutil.rmtree(path, ignore_errors=True)
             self.assertFalse(path.exists())
+    def test_parts(self):
+        ans: str = 'a/b/c'
+
+        path: Path = Path('a', 'b', 'c')
+        self.assertEqual(ans, str(path))
