@@ -89,6 +89,8 @@ class PandasTest(unittest.TestCase):
 
         :return:
         """
+        # Template
+        # self.cout("\n>>> \n{}\n".format())
 
         # >
         # > Object Creation
@@ -148,6 +150,42 @@ class PandasTest(unittest.TestCase):
         tdf = df.sort_values(by='B')
         self.cout("\n>>> df.sort_values(by='B')\n{}\n".format(tdf))
 
-        # >
-        # > Selection
-        # >
+        #>
+        #> Selection
+        #>
+
+        #>
+        #> Selection by Label
+        #>
+        ts = df['A']
+        self.cout("\n>>> df['A']\n{}\n".format(ts))
+
+        # Selecting via [], which slices the rows.
+        tdf = df[0:3]
+        self.cout('\n>>> df[0:3]\n{}\n'.format(tdf))
+
+        #> loc
+        #> https://pandas.pydata.org/pandas-docs/stable/generated/pandas.DataFrame.loc.html
+
+        ts = df.loc[dates[0]]
+        self.cout('\n>>> df.loc[dates[0]]\n{}\n'.format(ts))
+
+        tdf = df.loc[:,['A','B']]
+        self.cout("\n>>> df.loc[:,['A','B']]\n{}\n".format(tdf))
+
+        tdf = df.loc['2018-09-07':'2018-09-10', ['A','B']]
+        self.cout("\n>>> df.loc['2018-09-07':'2018-09-10', ['A','B']]\n{}\n".format(tdf))
+
+        ts = df.loc['2018-09-08',['A', 'B']]
+        self.cout("\n>>> df.loc['2018-09-08',['A', 'B']]\n{}\n".format(ts))
+
+        # For getting a scalar value:
+        v = df.loc[dates[0], 'A']
+        self.cout("\n>>> df.loc[dates[0], 'A']\n{}\n".format(v))
+        # For getting fast access to a scalar (equivalent to the prior method):
+        v = df.at[dates[0], 'A']
+        self.cout("\n>>> df.at[dates[0], 'A']\n{}\n".format(v))
+
+        #>
+        #> Selection by Position
+        #>
