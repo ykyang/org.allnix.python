@@ -1,11 +1,31 @@
 import unittest
+import sys
 
 import numpy as np
 import pandas as pd
 
 class PandasTest(unittest.TestCase):
+    _cout = sys.stdout
+    _cerr = sys.stderr
+
+    def cout(self, value):
+        self._cout.write('{}'.format(value))
+
+    def coutln(self, value=None):
+        if value is None:
+            self._cout.write('\n')
+        else:
+            self._cout.write('{}\n'.format(value))
+
+    def cerr(self, value):
+        self._cerr.write('{}\n'.format(value))
+
+    _df = None
+    _df2 = None
+
     """
     http://pandas.pydata.org/pandas-docs/stable/dsintro.html#dsintro
+    
     """
     def test_series(self):
         s = pd.Series(np.random.randn(5),index=['a', 'b', 'c', 'd', 'e'])
@@ -59,3 +79,75 @@ class PandasTest(unittest.TestCase):
         print(df)
 
         # Column selection, addition, deletion¶
+
+    def test_10_minutes_to_pandas(self):
+        """
+        http://pandas.pydata.org/pandas-docs/stable/10min.html
+
+        To run the test:
+        python -m unittest tests.test_pandas.PandasTest.test_object_creation
+
+        :return:
+        """
+
+        # >
+        # > Object Creation
+        # >
+
+        # Creating a Series by passing a list of values,
+        # letting pandas create a default integer index:
+        s = pd.Series([1,3,5,np.nan,6,8])
+        self.coutln(s)
+
+        # Creating a DataFrame by passing a NumPy array,
+        # with a datetime index and labeled columns:
+        dates = pd.date_range('2018-09-06', periods = 6)
+        self.coutln('\ndates:')
+        self.coutln(dates)
+        self.cout('type(dates): {}\n'.format(type(dates)))
+
+        df = pd.DataFrame(np.random.randn(6,4), index = dates, columns = list('ABCD'))
+        self.cout('\ndf:\n{}\n'.format(df))
+
+        # DataFrame from dictionary
+        df2 = pd.DataFrame(
+            {
+                'A': 1.,
+                'B': pd.Timestamp('2013-01-02'),
+                'C': pd.Series(1, index = list(range(4)), dtype='float32'),
+                'D': np.array([3]*4, dtype='int32'),
+                'E': pd.Categorical(['test','train', 'test', 'train']),
+                'F': 'foo'
+            }
+        )
+        self.coutln('\n>>> df2\n{}\n'.format(df2))
+
+        self.cout('\n>>> df2.dtypes\n{}\n'.format(df2.dtypes))
+
+        # >
+        # > Viewing Data
+        # >
+        self.cout('\n>>> df.head()\n{}\n'.format(df.head()))
+        self.cout('\n>>> df.head(2)\n{}\n'.format(df.head(2)))
+        self.cout('\n>>> df.tail(3)\n{}\n'.format(df.tail(3)))
+        self.cout('\n>>> df.index\n{}\n'.format(df.index))
+        self.cout('\n>>> df.columns\n{}\n'.format(df.columns))
+        self.cout('\n>>> type(df.columns)\n{}\n'.format(type(df.columns)))
+        self.cout('\n>>> df.values\n{}\n'.format(df.values))
+        self.cout('\n>>> df.describe()\n{}\n'.format(df.describe()))
+
+        tdf = df.T
+        self.cout('\n>>> df.T\n{}\n'.format(tdf))
+
+        tdf = df.sort_index(axis=0, ascending=False)
+        self.cout('\n>>> df.sort_index(axis=0, ascending=False)\n{}\n'.format(tdf))
+
+        tdf = df.sort_index(axis=1, ascending=False)
+        self.cout('\n>>> df.sort_index(axis=1, ascending=False)\n{}\n'.format(tdf))
+
+        tdf = df.sort_values(by='B')
+        self.cout("\n>>> df.sort_values(by='B')\n{}\n".format(tdf))
+
+        # >
+        # > Selection
+        # >
