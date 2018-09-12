@@ -189,3 +189,51 @@ class PandasTest(unittest.TestCase):
         #>
         #> Selection by Position
         #>
+        self.cout("\n>>> df\n{}\n".format(df))
+
+        ts = df.iloc[3]
+        self.cout("\n>>> df.iloc[3]\n{}\n".format(ts))
+
+        tdf = df.iloc[3:5, 0:2]
+        self.cout("\n>>> df.iloc[3:5, 0:2]\n{}\n".format(tdf))
+
+        tdf = df.iloc[[1,2,4],[0,2]]
+        self.cout("\n>>> df.iloc[[1,2,4],[0,2]]\n{}\n".format(tdf))
+
+        # For slicing rows explicitly:
+        tdf = df.iloc[1:3,:]
+        self.cout("\n>>> df.iloc[1:3,:]\n{}\n".format(tdf))
+
+        #For slicing columns explicitly:
+        tdf = df.iloc[:,1:3]
+        self.cout("\n>>> df.iloc[:,1:3]\n{}\n".format(tdf))
+
+        # For getting a value explicitly:
+        v = df.iloc[1,1]
+        self.cout("\n>>> df.iloc[1,1]\n{}\n".format(v))
+
+        # For getting fast access to a scalar (equivalent to the prior method):
+        v = df.iat[1,1]
+        self.cout("\n>>> df.iat[1,1]\n{}\n".format(v))
+
+        #>
+        #> Boolean Indexing
+        #>
+
+
+        # self.cout("\n>>> \n{}\n".format())
+        # self.cout("\n>>> \n{}\n".format())
+        # self.cout("\n>>> \n{}\n".format())
+        # self.cout("\n>>> \n{}\n".format())
+        # self.cout("\n>>> \n{}\n".format())
+        # self.cout("\n>>> \n{}\n".format())
+        # self.cout("\n>>> \n{}\n".format())
+        # self.cout("\n>>> \n{}\n".format())
+        # self.cout("\n>>> \n{}\n".format())
+        # self.cout("\n>>> \n{}\n".format())
+        # self.cout("\n>>> \n{}\n".format())
+        # self.cout("\n>>> \n{}\n".format())
+        # self.cout("\n>>> \n{}\n".format())
+        # self.cout("\n>>> \n{}\n".format())
+        # self.cout("\n>>> \n{}\n".format())
+        # self.cout("\n>>> \n{}\n".format())
