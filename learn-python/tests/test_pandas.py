@@ -219,12 +219,26 @@ class PandasTest(unittest.TestCase):
         #>
         #> Boolean Indexing
         #>
+        self.cout("\n>>> df\n{}\n".format(df))
 
+        tdf = df[df['A'] > 0]
+        self.cout("\n>>> df[df['A'] > 0]\n{}\n".format(tdf))
 
-        # self.cout("\n>>> \n{}\n".format())
-        # self.cout("\n>>> \n{}\n".format())
-        # self.cout("\n>>> \n{}\n".format())
-        # self.cout("\n>>> \n{}\n".format())
+        tdf = df[df > 0]
+        self.cout("\n>>> df[df > 0]\n{}\n".format(tdf))
+
+        # Using the isin() method for filtering:
+        df2 = df.copy()
+        df2['E'] = ['one', 'one','two','three','four','three']
+        self.cout("\n>>> df2\n{}\n".format(df2))
+
+        tdf = df2[df2['E'].isin(['two', 'four'])]
+        self.cout("\n>>> df2[df2['E'].isin(['two', 'four'])]\n{}\n".format(tdf))
+
+        #>
+        #> Setting
+        #>
+
         # self.cout("\n>>> \n{}\n".format())
         # self.cout("\n>>> \n{}\n".format())
         # self.cout("\n>>> \n{}\n".format())
