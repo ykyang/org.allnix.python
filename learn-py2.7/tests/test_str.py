@@ -3,6 +3,11 @@ import unittest
 import re
 
 class StrTest(unittest.TestCase):
+    """
+    Learn about Python str
+
+    python -m unittest discover tests
+    """
 
     def test_split(self):
         """
@@ -24,8 +29,11 @@ class StrTest(unittest.TestCase):
         val = ''.join('a, b,   c'.split()).split(',')
         self.assertEqual(ans, val)
 
+        # split with multiple delimiters
+        # then remove empty tokens
         val = re.split('\s|,', 'a , b, c')
-        val = filter(None, val)
+        # val = ['a', '', '', 'b', '', 'c']
+        val = filter(lambda x: x != '', val)
         self.assertEqual(ans, val)
 
         # Split by '.'

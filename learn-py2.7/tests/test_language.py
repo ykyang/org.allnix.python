@@ -1,6 +1,11 @@
 import unittest
 
 class LanguageTest(unittest.TestCase):
+    """
+    Learn Python built-in functions
+
+    python -m unittest discover tests
+    """
     def test_parsing(self):
 
         val = 'abcde'
