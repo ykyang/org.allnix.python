@@ -59,6 +59,8 @@ class MyForm(QDialog):
 class MyCommunicate(QObject):
     signal_number = Signal(int)
     signal_word = Signal(str)
+    signal_multiplex = Signal((int,), (str,))
+
 
 
     @Slot(int)

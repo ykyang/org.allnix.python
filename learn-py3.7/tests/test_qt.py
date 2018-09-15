@@ -39,3 +39,9 @@ class QtTest(unittest.TestCase):
 
         someone.signal_number.emit(10)
         someone.signal_word.emit('Hello everybody!')
+
+        someone.signal_multiplex.connect(someone.say_something) # (int,)
+        someone.signal_multiplex[str].connect(someone.say_something) # (str,)
+
+        someone.signal_multiplex.emit(10)
+        someone.signal_multiplex[str].emit("Hello from multiplex!")
