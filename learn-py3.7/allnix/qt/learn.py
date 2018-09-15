@@ -1,7 +1,7 @@
 import sys
 import random
 
-from PySide2.QtCore import Qt
+from PySide2.QtCore import Qt, QObject, Signal, Slot
 from PySide2.QtWidgets import QWidget, QLabel, QPushButton, QVBoxLayout, QLineEdit
 from PySide2.QtWidgets import QDialog, QLineEdit
 
@@ -55,4 +55,16 @@ class MyForm(QDialog):
 
     def greetings(self):
         print('Hello {}'.format(self.edit.text()))
+
+class MyCommunicate(QObject):
+    signal_number = Signal(int)
+    signal_word = Signal(str)
+
+
+    @Slot(int)
+    @Slot(str)
+    def say_something(self, words):
+        print(words)
+
+
 

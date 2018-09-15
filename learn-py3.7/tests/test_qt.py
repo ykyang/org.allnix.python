@@ -2,7 +2,7 @@ import unittest
 
 import sys
 
-from allnix.qt.learn import MyWidget, MyForm
+from allnix.qt.learn import MyWidget, MyForm, MyCommunicate
 from PySide2.QtWidgets import QApplication
 
 class QtTest(unittest.TestCase):
@@ -26,3 +26,16 @@ class QtTest(unittest.TestCase):
         form = MyForm()
         form.show()
         app.exec_()
+
+    def test_MyCommunication(self):
+        """
+        python -m unittest tests.test_qt.QtTest.test_MyCommunication
+        :return:
+        """
+        someone = MyCommunicate()
+
+        someone.signal_number.connect(someone.say_something)
+        someone.signal_word.connect(someone.say_something)
+
+        someone.signal_number.emit(10)
+        someone.signal_word.emit('Hello everybody!')
