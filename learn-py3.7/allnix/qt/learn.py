@@ -2,12 +2,8 @@ import sys
 import random
 
 from PySide2.QtCore import Qt
-from PySide2.QtWidgets import QApplication, QWidget, QLabel, QPushButton, QVBoxLayout
-
-# app = QApplication([])
-# label = QLabel('Hello Qt for Python!')
-# label.show()
-# app.exec_()
+from PySide2.QtWidgets import QWidget, QLabel, QPushButton, QVBoxLayout, QLineEdit
+from PySide2.QtWidgets import QDialog, QLineEdit
 
 class MyWidget(QWidget):
     """
@@ -39,10 +35,24 @@ class MyWidget(QWidget):
     def magic(self):
         self.text.setText(random.choice(self.hello))
 
-if __name__ == '__main__':
-    app = QApplication(sys.argv)
-    widget = MyWidget()
-    widget.resize(400, 300)
-    widget.show()
-    sys.exit(app.exec_())
+class MyForm(QDialog):
+    """
+    https://wiki.qt.io/Qt_for_Python_Tutorial_SimpleDialog
+    """
+    button: QPushButton
+    edit: QLineEdit
+
+    def __init__(self, parent=None):
+        super().__init__(parent)
+        self.setWindowTitle("My Form")
+        self.edit = QLineEdit('Write my name here')
+        self.button = QPushButton('Show Greetings')
+        layout = QVBoxLayout()
+        layout.addWidget(self.edit)
+        layout.addWidget(self.button)
+        self.setLayout(layout)
+        self.button.clicked.connect(self.greetings)
+
+    def greetings(self):
+        print('Hello {}'.format(self.edit.text()))
 
