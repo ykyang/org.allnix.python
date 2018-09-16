@@ -2,8 +2,10 @@ import unittest
 
 import sys
 
-from allnix.qt.learn import MyWidget, MyForm, MyCommunicate
-from PySide2.QtWidgets import QApplication
+from allnix.qt.learn import MyWidget, MyForm, MyCommunicate, MyMainWindow
+from PySide2.QtWidgets import QApplication, QMainWindow
+from PySide2.QtCharts import QtCharts
+
 
 class QtTest(unittest.TestCase):
     def test_MyWidget(self) -> None:
@@ -45,3 +47,14 @@ class QtTest(unittest.TestCase):
 
         someone.signal_multiplex.emit(10)
         someone.signal_multiplex[str].emit("Hello from multiplex!")
+
+    def test_BarChart(self):
+        """
+        python -m unittest tests.test_qt.QtTest.test_BarChart
+        :return:
+        """
+        app = QApplication(sys.argv)
+        w = MyMainWindow()
+        w.resize(420, 300)
+        w.show()
+        app.exec_()
