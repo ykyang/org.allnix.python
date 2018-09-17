@@ -85,7 +85,7 @@ class PandasTest(unittest.TestCase):
         http://pandas.pydata.org/pandas-docs/stable/10min.html
 
         To run the test:
-        python -m unittest tests.test_pandas.PandasTest.test_object_creation
+        python -m unittest tests.test_pandas.PandasTest.test_10_minutes_to_pandas
 
         :return:
         """
@@ -238,12 +238,47 @@ class PandasTest(unittest.TestCase):
         #>
         #> Setting
         #>
+        self.cout("\n>>> df\n{}\n".format(df))
 
-        # self.cout("\n>>> \n{}\n".format())
-        # self.cout("\n>>> \n{}\n".format())
-        # self.cout("\n>>> \n{}\n".format())
-        # self.cout("\n>>> \n{}\n".format())
-        # self.cout("\n>>> \n{}\n".format())
+        # Setting a new column automatically aligns the data by the indexes.
+        # notice the index range is out of bound at the end
+        ts = pd.Series(data=[1,2,3,4,5,6],
+                       index=pd.date_range('2018-09-07', periods=6))
+        self.cout("\n>>> A series with out of bound index\n{}\n".format(ts))
+        df['F'] = ts
+        self.cout("\n>>> df\n{}\n".format(df))
+        self.cout('\nNotice the NaN at the top and missing 6.0 at the end of column F\n')
+
+        # A where operation with setting.
+        df2 = df.copy()
+        df2[df2 > 0] = -df2
+        self.cout("\n>>> df2[df2 > 0] = -df2\n{}\n".format(df2))
+        self.cout('\nAll the positive numbers are now negative\n')
+
+        # >
+        # > Missing Data
+        # >
+        df1 = df.reindex(index=dates[0:4], columns=list(df.columns).append('E'))
+        self.cout("\n>>> df1: Reindexed but no data\n{}\n".format(df1))
+        df1.loc[dates[0]:dates[1],'E'] = 1
+        self.cout("\n>>> df1: 'E' column data set\n{}\n".format(df1))
+
+        # To drop any rows that have missing data.
+        df2 = df1.dropna(how='any')
+        self.cout("\n>>> df1.dropna(how='any')\n{}\n".format(df2))
+
+        # Filling missing data.
+        df2 = df1.fillna(value=5)
+        self.cout("\n>>> df1.fillna(value=5)\n{}\n".format(df2))
+
+        # To get the boolean mask where values are nan.
+        df2 = pd.isna(df1)
+        self.cout("\n>>> pd.isna(df1)\n{}\n".format(df2))
+
+        # >
+        # > Operations
+        # >
+
         # self.cout("\n>>> \n{}\n".format())
         # self.cout("\n>>> \n{}\n".format())
         # self.cout("\n>>> \n{}\n".format())
