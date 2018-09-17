@@ -3,6 +3,7 @@ import unittest
 import sys
 
 from allnix.qt.learn import MyWidget, MyForm, MyCommunicate, MyMainWindow
+from allnix.qt.learn import MyThemeWidget
 from PySide2.QtWidgets import QApplication, QMainWindow
 from PySide2.QtCharts import QtCharts
 
@@ -57,4 +58,19 @@ class QtTest(unittest.TestCase):
         w = MyMainWindow()
         w.resize(420, 300)
         w.show()
+        app.exec_()
+
+    def test_ThemeWidget(self):
+        """
+        python -m unittest tests.test_qt.QtTest.test_ThemeWidget
+        :return:
+        """
+        app = QApplication(sys.argv)
+        window = QMainWindow()
+        widget = MyThemeWidget(None)
+        window.setCentralWidget(widget)
+        available_geometry = app.desktop().availableGeometry(window)
+        size = available_geometry.height() * 0.75
+        window.setFixedSize(size, size * 0.8)
+        window.show()
         app.exec_()
