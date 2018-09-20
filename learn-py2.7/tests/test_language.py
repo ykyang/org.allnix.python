@@ -14,3 +14,5 @@ class LanguageTest(unittest.TestCase):
 
 
         #  isinstance(someInt, numbers.Real)
+
+    def test_class(self):
