@@ -20,14 +20,14 @@ class LanguageTest(unittest.TestCase):
         logger.info('__class__: {}'.format(self.__class__))
 
     def test_list_comprehension(self):
-        raise NotImplementedError()
+        self.fail('learn list comprehension')
 
     def test_unpacking(self):
         l: list = [1,2,3]
 
         # See how *l is unpacked into 1,2,3 and passed as 3 arguments
         logger.info('{}, {}, {}'.format(*l))
-        logger.info('test')
+        self.fail('check dic unpacking')
 
         # Use **d to unpack a dictionary for keyword arguments
         # not sure how to test
