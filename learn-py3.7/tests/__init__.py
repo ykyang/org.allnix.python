@@ -1,7 +1,7 @@
 import logging
 import logging.config
-from logzero import logger
-import logzero
+#from logzero import logger
+#import logzero
 
 # formatter = logging.Formatter('[%(levelname)1.1s %(asctime)s %(module)s:%(lineno)d] %(message)s',
 #                               '%Y-%m-%d %H:%M:%S');
