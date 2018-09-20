@@ -1,18 +1,14 @@
 import unittest
 from tests import logger
-#from logzero import logger
-#import logzero
-import logging
+
 
 class LanguageTest(unittest.TestCase):
-
-    def setUp(self):
-        pass
- #       logzero.logger = logzero.setup_logger('default')
-
     """
     python -m unittest tests.test_language.LanguageTest
     """
+    def setUp(self):
+        pass
+
     def test_name(self):
         logger.info('__module__: {}'.format(self.__module__))
         logger.info('__name__: {}'.format(__name__))
@@ -23,13 +19,26 @@ class LanguageTest(unittest.TestCase):
         self.fail('learn list comprehension')
 
     def test_unpacking(self):
+        """
+        Learn *list and **dict
+
+        :return:
+        """
         l: list = [1,2,3]
+        self.assertRaises(TypeError, self._take_3, l)
 
         # See how *l is unpacked into 1,2,3 and passed as 3 arguments
-        logger.info('{}, {}, {}'.format(*l))
-        self.fail('check dic unpacking')
+        self._take_3(*l)  # should not raise error
+        # logger.info('{}, {}, {}'.format(*l))
 
         # Use **d to unpack a dictionary for keyword arguments
-        # not sure how to test
+        d: dict = {'one': 1, 'two': 2, 'three': 3}
+        self._take_3_dic(**d)  # should not raise error
 
+    def _take_3(self, one, two, three):
+        pass
 
+    def _take_3_dic(self, one=None, two=None, three=None):
+        self.assertIsNotNone(one)
+        self.assertIsNotNone(two)
+        self.assertIsNotNone(three)
