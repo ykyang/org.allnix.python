@@ -1,24 +1,26 @@
 import unittest
 import sys
 
+from tests import *
+
 import numpy as np
 import pandas as pd
 
 class PandasTest(unittest.TestCase):
-    _cout = sys.stdout
-    _cerr = sys.stderr
-
-    def cout(self, value):
-        self._cout.write('{}'.format(value))
-
-    def coutln(self, value=None):
-        if value is None:
-            self._cout.write('\n')
-        else:
-            self._cout.write('{}\n'.format(value))
-
-    def cerr(self, value):
-        self._cerr.write('{}\n'.format(value))
+    # _cout = sys.stdout
+    # _cerr = sys.stderr
+    #
+    # def cout(self, value):
+    #     self._cout.write('{}'.format(value))
+    #
+    # def coutln(self, value=None):
+    #     if value is None:
+    #         self._cout.write('\n')
+    #     else:
+    #         self._cout.write('{}\n'.format(value))
+    #
+    # def cerr(self, value):
+    #     self._cerr.write('{}\n'.format(value))
 
     _df = None
     _df2 = None
@@ -99,17 +101,17 @@ class PandasTest(unittest.TestCase):
         # Creating a Series by passing a list of values,
         # letting pandas create a default integer index:
         s = pd.Series([1,3,5,np.nan,6,8])
-        self.coutln(s)
+        coutln(s)
 
         # Creating a DataFrame by passing a NumPy array,
         # with a datetime index and labeled columns:
         dates = pd.date_range('2018-09-06', periods = 6)
-        self.coutln('\ndates:')
-        self.coutln(dates)
-        self.cout('type(dates): {}\n'.format(type(dates)))
+        coutln('\ndates:')
+        coutln(dates)
+        cout('type(dates): {}\n'.format(type(dates)))
 
         df = pd.DataFrame(np.random.randn(6,4), index = dates, columns = list('ABCD'))
-        self.cout('\ndf:\n{}\n'.format(df))
+        cout('\ndf:\n{}\n'.format(df))
 
         # DataFrame from dictionary
         df2 = pd.DataFrame(
@@ -122,33 +124,33 @@ class PandasTest(unittest.TestCase):
                 'F': 'foo'
             }
         )
-        self.coutln('\n>>> df2\n{}\n'.format(df2))
+        coutln('\n>>> df2\n{}\n'.format(df2))
 
-        self.cout('\n>>> df2.dtypes\n{}\n'.format(df2.dtypes))
+        cout('\n>>> df2.dtypes\n{}\n'.format(df2.dtypes))
 
         # >
         # > Viewing Data
         # >
-        self.cout('\n>>> df.head()\n{}\n'.format(df.head()))
-        self.cout('\n>>> df.head(2)\n{}\n'.format(df.head(2)))
-        self.cout('\n>>> df.tail(3)\n{}\n'.format(df.tail(3)))
-        self.cout('\n>>> df.index\n{}\n'.format(df.index))
-        self.cout('\n>>> df.columns\n{}\n'.format(df.columns))
-        self.cout('\n>>> type(df.columns)\n{}\n'.format(type(df.columns)))
-        self.cout('\n>>> df.values\n{}\n'.format(df.values))
-        self.cout('\n>>> df.describe()\n{}\n'.format(df.describe()))
+        cout('\n>>> df.head()\n{}\n'.format(df.head()))
+        cout('\n>>> df.head(2)\n{}\n'.format(df.head(2)))
+        cout('\n>>> df.tail(3)\n{}\n'.format(df.tail(3)))
+        cout('\n>>> df.index\n{}\n'.format(df.index))
+        cout('\n>>> df.columns\n{}\n'.format(df.columns))
+        cout('\n>>> type(df.columns)\n{}\n'.format(type(df.columns)))
+        cout('\n>>> df.values\n{}\n'.format(df.values))
+        cout('\n>>> df.describe()\n{}\n'.format(df.describe()))
 
         tdf = df.T
-        self.cout('\n>>> df.T\n{}\n'.format(tdf))
+        cout('\n>>> df.T\n{}\n'.format(tdf))
 
         tdf = df.sort_index(axis=0, ascending=False)
-        self.cout('\n>>> df.sort_index(axis=0, ascending=False)\n{}\n'.format(tdf))
+        cout('\n>>> df.sort_index(axis=0, ascending=False)\n{}\n'.format(tdf))
 
         tdf = df.sort_index(axis=1, ascending=False)
-        self.cout('\n>>> df.sort_index(axis=1, ascending=False)\n{}\n'.format(tdf))
+        cout('\n>>> df.sort_index(axis=1, ascending=False)\n{}\n'.format(tdf))
 
         tdf = df.sort_values(by='B')
-        self.cout("\n>>> df.sort_values(by='B')\n{}\n".format(tdf))
+        cout("\n>>> df.sort_values(by='B')\n{}\n".format(tdf))
 
         #>
         #> Selection
@@ -158,131 +160,149 @@ class PandasTest(unittest.TestCase):
         #> Selection by Label
         #>
         ts = df['A']
-        self.cout("\n>>> df['A']\n{}\n".format(ts))
+        cout("\n>>> df['A']\n{}\n".format(ts))
 
         # Selecting via [], which slices the rows.
         tdf = df[0:3]
-        self.cout('\n>>> df[0:3]\n{}\n'.format(tdf))
+        cout('\n>>> df[0:3]\n{}\n'.format(tdf))
 
         #> loc
         #> https://pandas.pydata.org/pandas-docs/stable/generated/pandas.DataFrame.loc.html
 
         ts = df.loc[dates[0]]
-        self.cout('\n>>> df.loc[dates[0]]\n{}\n'.format(ts))
+        cout('\n>>> df.loc[dates[0]]\n{}\n'.format(ts))
 
         tdf = df.loc[:,['A','B']]
-        self.cout("\n>>> df.loc[:,['A','B']]\n{}\n".format(tdf))
+        cout("\n>>> df.loc[:,['A','B']]\n{}\n".format(tdf))
 
         tdf = df.loc['2018-09-07':'2018-09-10', ['A','B']]
-        self.cout("\n>>> df.loc['2018-09-07':'2018-09-10', ['A','B']]\n{}\n".format(tdf))
+        cout("\n>>> df.loc['2018-09-07':'2018-09-10', ['A','B']]\n{}\n".format(tdf))
 
         ts = df.loc['2018-09-08',['A', 'B']]
-        self.cout("\n>>> df.loc['2018-09-08',['A', 'B']]\n{}\n".format(ts))
+        cout("\n>>> df.loc['2018-09-08',['A', 'B']]\n{}\n".format(ts))
 
         # For getting a scalar value:
         v = df.loc[dates[0], 'A']
-        self.cout("\n>>> df.loc[dates[0], 'A']\n{}\n".format(v))
+        cout("\n>>> df.loc[dates[0], 'A']\n{}\n".format(v))
         # For getting fast access to a scalar (equivalent to the prior method):
         v = df.at[dates[0], 'A']
-        self.cout("\n>>> df.at[dates[0], 'A']\n{}\n".format(v))
+        cout("\n>>> df.at[dates[0], 'A']\n{}\n".format(v))
 
         #>
         #> Selection by Position
         #>
-        self.cout("\n>>> df\n{}\n".format(df))
+        cout("\n>>> df\n{}\n".format(df))
 
         ts = df.iloc[3]
-        self.cout("\n>>> df.iloc[3]\n{}\n".format(ts))
+        cout("\n>>> df.iloc[3]\n{}\n".format(ts))
 
         tdf = df.iloc[3:5, 0:2]
-        self.cout("\n>>> df.iloc[3:5, 0:2]\n{}\n".format(tdf))
+        cout("\n>>> df.iloc[3:5, 0:2]\n{}\n".format(tdf))
 
         tdf = df.iloc[[1,2,4],[0,2]]
-        self.cout("\n>>> df.iloc[[1,2,4],[0,2]]\n{}\n".format(tdf))
+        cout("\n>>> df.iloc[[1,2,4],[0,2]]\n{}\n".format(tdf))
 
         # For slicing rows explicitly:
         tdf = df.iloc[1:3,:]
-        self.cout("\n>>> df.iloc[1:3,:]\n{}\n".format(tdf))
+        cout("\n>>> df.iloc[1:3,:]\n{}\n".format(tdf))
 
         #For slicing columns explicitly:
         tdf = df.iloc[:,1:3]
-        self.cout("\n>>> df.iloc[:,1:3]\n{}\n".format(tdf))
+        cout("\n>>> df.iloc[:,1:3]\n{}\n".format(tdf))
 
         # For getting a value explicitly:
         v = df.iloc[1,1]
-        self.cout("\n>>> df.iloc[1,1]\n{}\n".format(v))
+        cout("\n>>> df.iloc[1,1]\n{}\n".format(v))
 
         # For getting fast access to a scalar (equivalent to the prior method):
         v = df.iat[1,1]
-        self.cout("\n>>> df.iat[1,1]\n{}\n".format(v))
+        cout("\n>>> df.iat[1,1]\n{}\n".format(v))
 
         #>
         #> Boolean Indexing
         #>
-        self.cout("\n>>> df\n{}\n".format(df))
+        cout("\n>>> df\n{}\n".format(df))
 
         tdf = df[df['A'] > 0]
-        self.cout("\n>>> df[df['A'] > 0]\n{}\n".format(tdf))
+        cout("\n>>> df[df['A'] > 0]\n{}\n".format(tdf))
 
         tdf = df[df > 0]
-        self.cout("\n>>> df[df > 0]\n{}\n".format(tdf))
+        cout("\n>>> df[df > 0]\n{}\n".format(tdf))
 
         # Using the isin() method for filtering:
         df2 = df.copy()
         df2['E'] = ['one', 'one','two','three','four','three']
-        self.cout("\n>>> df2\n{}\n".format(df2))
+        cout("\n>>> df2\n{}\n".format(df2))
 
         tdf = df2[df2['E'].isin(['two', 'four'])]
-        self.cout("\n>>> df2[df2['E'].isin(['two', 'four'])]\n{}\n".format(tdf))
+        cout("\n>>> df2[df2['E'].isin(['two', 'four'])]\n{}\n".format(tdf))
 
         #>
         #> Setting
         #>
-        self.cout("\n>>> df\n{}\n".format(df))
+        cout("\n>>> df\n{}\n".format(df))
 
         # Setting a new column automatically aligns the data by the indexes.
         # notice the index range is out of bound at the end
         ts = pd.Series(data=[1,2,3,4,5,6],
                        index=pd.date_range('2018-09-07', periods=6))
-        self.cout("\n>>> A series with out of bound index\n{}\n".format(ts))
+        cout("\n>>> A series with out of bound index\n{}\n".format(ts))
         df['F'] = ts
-        self.cout("\n>>> df\n{}\n".format(df))
-        self.cout('\nNotice the NaN at the top and missing 6.0 at the end of column F\n')
+        cout("\n>>> df\n{}\n".format(df))
+        cout('\nNotice the NaN at the top and missing 6.0 at the end of column F\n')
 
         # A where operation with setting.
         df2 = df.copy()
         df2[df2 > 0] = -df2
-        self.cout("\n>>> df2[df2 > 0] = -df2\n{}\n".format(df2))
-        self.cout('\nAll the positive numbers are now negative\n')
+        cout("\n>>> df2[df2 > 0] = -df2\n{}\n".format(df2))
+        cout('\nAll the positive numbers are now negative\n')
 
         # >
         # > Missing Data
         # >
+        cout('\n'*10)
+        coutln('--------------------')
+        coutln('--- missing data ---')
+        coutln('--------------------')
+        coutln("\n>>> df\n{}".format(df))
         df1 = df.reindex(index=dates[0:4], columns=list(df.columns).append('E'))
-        self.cout("\n>>> df1: Reindexed but no data\n{}\n".format(df1))
+        cout("\n>>> df1: Reindexed but no data\n{}\n".format(df1))
         df1.loc[dates[0]:dates[1],'E'] = 1
-        self.cout("\n>>> df1: 'E' column data set\n{}\n".format(df1))
+        cout("\n>>> df1: 'E' column data set\n{}\n".format(df1))
 
         # To drop any rows that have missing data.
         df2 = df1.dropna(how='any')
-        self.cout("\n>>> df1.dropna(how='any')\n{}\n".format(df2))
+        cout("\n>>> df1.dropna(how='any')\n{}\n".format(df2))
 
         # Filling missing data.
         df2 = df1.fillna(value=5)
-        self.cout("\n>>> df1.fillna(value=5)\n{}\n".format(df2))
+        cout("\n>>> df1.fillna(value=5)\n{}\n".format(df2))
 
         # To get the boolean mask where values are nan.
         df2 = pd.isna(df1)
-        self.cout("\n>>> pd.isna(df1)\n{}\n".format(df2))
+        cout("\n>>> pd.isna(df1)\n{}\n".format(df2))
+
+        # > My own NaN test
+        coutln("\n>>> df\n{}".format(df))
+        ts = df.loc[:, 'F']
+        coutln("\n>>> ts = df.loc[:, 'F']\n{}".format(ts))
+        self.assertEqual(6, ts.size)
+        self.assertTrue(pd.isnull(ts[0]))
+        # > strip NaN
+        ts = ts[pd.notnull(ts)]
+        coutln("\n>>> ts = ts[pd.notnull(ts)]\n{}".format(ts))
+        self.assertEqual(5, ts.size)
+        self.assertEqual(1.0, ts[0])
+        self.assertEqual(5.0, ts[4])
 
         # >
         # > Operations
         # >
 
-        # self.cout("\n>>> \n{}\n".format())
-        # self.cout("\n>>> \n{}\n".format())
-        # self.cout("\n>>> \n{}\n".format())
-        # self.cout("\n>>> \n{}\n".format())
-        # self.cout("\n>>> \n{}\n".format())
-        # self.cout("\n>>> \n{}\n".format())
-        # self.cout("\n>>> \n{}\n".format())
+        # cout("\n>>> \n{}\n".format())
+        # cout("\n>>> \n{}\n".format())
+        # cout("\n>>> \n{}\n".format())
+        # cout("\n>>> \n{}\n".format())
+        # cout("\n>>> \n{}\n".format())
+        # cout("\n>>> \n{}\n".format())
+        # cout("\n>>> \n{}\n".format())

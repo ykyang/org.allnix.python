@@ -1,5 +1,6 @@
 import logging
 import logging.config
+import sys
 #from logzero import logger
 #import logzero
 
@@ -56,6 +57,31 @@ dict_config = {
 logging.config.dictConfig(dict_config)
 logger = logging.getLogger('default')
 
+
+_cout = sys.stdout
+_cerr = sys.stderr
+
+
+def cout(value):
+    _cout.write('{}'.format(value))
+
+
+def coutln(value=None):
+    if value is None:
+        _cout.write('\n')
+    else:
+        _cout.write('{}\n'.format(value))
+
+
+def cerr(value):
+    _cerr.write('{}\n'.format(value))
+
+
+def cerrln(value=None):
+    if value is None:
+        _cerr.write('\n')
+    else:
+        _cerr.write('{}\n'.format(value))
 
 
 def configure_logger(log_path):
