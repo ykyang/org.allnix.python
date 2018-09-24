@@ -34,7 +34,7 @@ class NumpyTest(unittest.TestCase):
         python -m unittest tests.test_numpy.NumpyTest.test_linspace
         :return:
         """
-        v: np.array = np.linspace(0., 1000., 5)
+        v: np.ndarray = np.linspace(0., 1000., 5)
         coutln('>>> np.linspace(0., 1000., 5)')
         coutln(v)
         coutln(v.dtype)
@@ -58,3 +58,10 @@ class NumpyTest(unittest.TestCase):
         coutln(v)
         i: np.array = np.searchsorted(a, v)
         coutln(i)
+
+    def test_record(self):
+        """
+        Learn numpy.record
+        :return:
+        """
+        raise NotImplementedError
