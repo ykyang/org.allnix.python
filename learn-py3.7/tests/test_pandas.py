@@ -294,6 +294,8 @@ class PandasTest(unittest.TestCase):
         self.assertEqual(5, ts.size)
         self.assertEqual(1.0, ts[0])
         self.assertEqual(5.0, ts[4])
+        #ts = list(ts)
+        #print(ts)
 
         # >
         # > Operations

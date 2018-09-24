@@ -4,7 +4,8 @@ import numpy as np
 
 class NumpyTest(unittest.TestCase):
     def test_arange(self):
-        """Learn numpy.arange()
+        """
+        Learn numpy.arange()
         """
         
         v: np.ndarray = np.arange(10)
