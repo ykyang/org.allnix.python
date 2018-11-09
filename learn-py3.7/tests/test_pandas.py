@@ -66,8 +66,9 @@ class PandasTest(unittest.TestCase):
              'two': pd.Series([1., 2., 3., 4.], index=['a', 'b', 'c', 'd'])}
 
         df = pd.DataFrame(d)
-
+        print('shape: {}'.format(df.shape))
         print(df)
+        self.assertEqual(4, df.shape[0])
 
         df = pd.DataFrame(df, index=['d', 'b', 'a'])
         print(df)
