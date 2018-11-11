@@ -5,6 +5,16 @@ import numpy as np
 
 
 class NumpyTest(unittest.TestCase):
+    def test_zeros(self):
+        """
+        Learn numpy.zeros()
+
+        python -m unittest tests.test_numpy.NumpyTest.test_zeros
+        """
+        v: np.ndarray = np.zeros((5,), dtype=float, order='C')
+        coutln(v)
+
+
     def test_arange(self):
         """
         Learn numpy.arange()
@@ -65,3 +75,13 @@ class NumpyTest(unittest.TestCase):
         :return:
         """
         raise NotImplementedError
+
+    def test_matrix(self):
+        """
+        python -m unittest tests.test_numpy.NumpyTest.test_matrix
+
+        :return:
+        """
+        m = np.zeros((2,2))
+        m[1,1] += 5.
+        coutln(m)

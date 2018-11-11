@@ -8,6 +8,19 @@ class StrTest(unittest.TestCase):
 
     python -m unittest discover tests
     """
+    def test_boolean(self):
+        """
+        python -m unittest tests.test_str.StrTest.test_boolean
+        :return:
+        """
+        # > Learn when str will be treated as false
+        val = str('')
+        self.assertFalse(val)
+        val = None
+        self.assertFalse(val)
+        # > when str will be treated as True
+        val = str(' ')
+        self.assertTrue(val)
 
     def test_split(self):
         """
