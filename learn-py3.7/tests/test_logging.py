@@ -1,11 +1,14 @@
 import unittest
 from tests import logger
-#import logging
+import logging
 #import logging.config
 #from logzero import logger
 #import logzero
 
 class LoggingTest(unittest.TestCase):
+    """
+    python -m unittest tests.test_logging.LoggingTest
+    """
     # logger: logging.Logger
     def setUp(self):
         pass
@@ -64,3 +67,20 @@ class LoggingTest(unittest.TestCase):
         #logzero.log
         #self.logger.warning('My first log')
         logger.info('My first log')
+
+    def test_loggers(self):
+        root_logger = logging.getLogger()
+        allnix_logger = logging.getLogger('org.allnix')
+        default_logger = logging.getLogger('default')
+
+        root_logger.debug('hello 1')
+        allnix_logger.debug('hello 2')
+        default_logger.debug('hello 3')
+
+        root_logger.info('hello 4')
+        allnix_logger.info('hello 5')
+        default_logger.info('hello 6')
+
+        root_logger.warning('hello 7')
+        allnix_logger.warning('hello 8')
+        default_logger.warning('hello 9')

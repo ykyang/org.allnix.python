@@ -48,7 +48,15 @@ dict_config = {
         'default': {
             'level': 'DEBUG',
             'handlers': ['console', 'file']
+        },
+        'org.allnix':{
+            'level': 'INFO',
+            'handlers': ['console', 'file']
         }
+    },
+    'root':{
+        'level':'WARNING',
+        '#handlers': ['console', 'file']
     },
     'disable_existing_loggers': False
 }
