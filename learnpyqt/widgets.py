@@ -35,14 +35,39 @@ class MainWindow(qtw.QMainWindow):
 #         #print(type(widget.currentIndexChanged))
 #         widget.currentTextChanged.connect(self.text_changed)                 
         
-        widget = qtw.QListWidget()
-        widget.addItems(['One', 'Two', 'Three'])
-        widget.currentItemChanged.connect(self.item_changed)
-        widget.currentTextChanged.connect(self.text_changed)
+#         widget = qtw.QListWidget()
+#         widget.addItems(['One', 'Two', 'Three'])
+#         widget.currentItemChanged.connect(self.item_changed)
+#         widget.currentTextChanged.connect(self.text_changed)
         
+        self.widget = widget = qtw.QLineEdit()
+        #widget.setMaxLength(10)
+        widget.setInputMask('(000)000-0000;_')
+        widget.setPlaceholderText("Enter your text")
+        
+        widget.returnPressed.connect(self.return_pressed)
+        widget.selectionChanged.connect(self.selection_changed)
+        widget.textChanged.connect(self.text_changed)
+        widget.textEdited.connect(self.text_edited)
         
         self.setCentralWidget(widget)
 
+    def return_pressed(self):
+        print('Return pressed')
+        self.widget.setText('BOOM!')
+        
+    def selection_changed(self):
+        print('Selection changed')
+        print(self.widget.selectedText())
+        
+    def text_changed(self, s):
+        print('Text changed...')
+        print(s)
+        
+    def text_edited(self, s):
+        print('Text edited...')
+        print(s)
+        
     def item_changed(self, item):
         print(item.text())
         
@@ -50,8 +75,8 @@ class MainWindow(qtw.QMainWindow):
         print(i)
         
         
-    def text_changed(self, s):
-        print(s)
+#     def text_changed(self, s):
+#         print(s)
         
     def show_state(self, s):
         print(s == qtc.Qt.Checked)
