@@ -40,17 +40,35 @@ class MainWindow(qtw.QMainWindow):
 #         widget.currentItemChanged.connect(self.item_changed)
 #         widget.currentTextChanged.connect(self.text_changed)
         
-        self.widget = widget = qtw.QLineEdit()
-        #widget.setMaxLength(10)
-        widget.setInputMask('(000)000-0000;_')
-        widget.setPlaceholderText("Enter your text")
+#         self.widget = widget = qtw.QLineEdit()
+#         #widget.setMaxLength(10)
+#         widget.setInputMask('(000)000-0000;_')
+#         widget.setPlaceholderText("Enter your text")
+#         
+#         widget.returnPressed.connect(self.return_pressed)
+#         widget.selectionChanged.connect(self.selection_changed)
+#         widget.textChanged.connect(self.text_changed)
+#         widget.textEdited.connect(self.text_edited)
+
+        widget = qtw.QSpinBox()
+        #widget = qtw.QDoubleSpinBox()
+        widget.setMinimum(-5)
+        widget.setMaximum(+5)
+        # widget.setRange
+        widget.setPrefix('$')
+        widget.setSuffix('c')
+        widget.setSingleStep(3)
+        widget.valueChanged.connect(self.value_changed)
+        widget.valueChanged[str].connect(self.value_changed_str)
         
-        widget.returnPressed.connect(self.return_pressed)
-        widget.selectionChanged.connect(self.selection_changed)
-        widget.textChanged.connect(self.text_changed)
-        widget.textEdited.connect(self.text_edited)
         
         self.setCentralWidget(widget)
+
+    def value_changed(self, i):
+        print('value = %i' % i)
+
+    def value_changed_str(self, s):    
+        print('value[str] = %s' % s)
 
     def return_pressed(self):
         print('Return pressed')
