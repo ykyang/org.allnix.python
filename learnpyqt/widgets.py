@@ -50,19 +50,41 @@ class MainWindow(qtw.QMainWindow):
 #         widget.textChanged.connect(self.text_changed)
 #         widget.textEdited.connect(self.text_edited)
 
-        widget = qtw.QSpinBox()
-        #widget = qtw.QDoubleSpinBox()
-        widget.setMinimum(-5)
-        widget.setMaximum(+5)
-        # widget.setRange
-        widget.setPrefix('$')
-        widget.setSuffix('c')
+#         widget = qtw.QSpinBox()
+#         #widget = qtw.QDoubleSpinBox()
+#         widget.setMinimum(-5)
+#         widget.setMaximum(+5)
+#         # widget.setRange
+#         widget.setPrefix('$')
+#         widget.setSuffix('c')
+#         widget.setSingleStep(3)
+#         widget.valueChanged.connect(self.value_changed)
+#         widget.valueChanged[str].connect(self.value_changed_str)
+                
+        widget = qtw.QSlider(qtc.Qt.Horizontal)
+        
+        widget.setMinimum(-10)
+        widget.setMaximum(3)
+        
         widget.setSingleStep(3)
+        
         widget.valueChanged.connect(self.value_changed)
-        widget.valueChanged[str].connect(self.value_changed_str)
+        widget.sliderMoved.connect(self.slider_position)
+        widget.sliderPressed.connect(self.slider_pressed)
+        widget.sliderReleased.connect(self.slider_released)
+                
         
-        
+                
         self.setCentralWidget(widget)
+    def slider_pressed(self):
+        print('Pressed')
+    
+    def slider_released(self):
+        print('Released')
+        
+    def slider_position(self, p):
+        print('position = %i' % p)
+
 
     def value_changed(self, i):
         print('value = %i' % i)
