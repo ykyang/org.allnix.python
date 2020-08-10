@@ -18,6 +18,7 @@ class MainWindow(qtw.QMainWindow):
         #toolbar.setToolButtonStyle(qtc.Qt.ToolButtonTextUnderIcon)
         self.addToolBar(toolbar)
         
+        # https://p.yusukekamiyamane.com/
         action = qtw.QAction(qtg.QIcon('fugue/icons/bug.png'), 'Your button', self)
         action.setStatusTip('This is your button')
         action.triggered.connect(self.onMyToolBarButtonClicked)
