@@ -2,8 +2,13 @@
 Learn Python from Scratch
 =====================================
 
+Create new scripts
+==================
+A new script ``hello.py`` for "Hello World".
+
 Create a new package
 ====================
+Create package directory ``learnall/`` and ``__init__.py`` to make it a package.
 
 Resources
 =========
