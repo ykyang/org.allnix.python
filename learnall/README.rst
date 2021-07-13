@@ -1,7 +1,14 @@
-Learn Python by starting from scratch.
+=====================================
+Learn Python from Scratch
+=====================================
+
+Create a new package
+====================
 
 Resources
+=========
 
+* `Minimal Structure <https://python-packaging.readthedocs.io/en/latest/minimal.html>`_
 * `Structuring Your Project <https://docs.python-guide.org/writing/structure/>`_
 * `Learning Python <https://docs.python-guide.org/intro/learning/>`_
 * `reStructuredText Cheat Sheet 
