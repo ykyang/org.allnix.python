@@ -1,5 +1,6 @@
 import vtk
-
+#import tkinter
+import time
 # https://kitware.github.io/vtk-examples/site/
 # See vtkInteractorStyle for key binding
 
@@ -185,6 +186,7 @@ def box():
 
     # An interactor
     interactor = vtk.vtkRenderWindowInteractor()
+    #interactor = vtk.vtkGenericRenderWindowInteractor()
     interactor.SetRenderWindow(renwin)
 
     # A Box widget
@@ -206,11 +208,137 @@ def box():
     renwin.SetWindowName('BoxWidget')
     renwin.Render()
     interactor.Start()
+    #time.sleep(10)
+    
+
+
+
+
+def vtkRenderWindowInteractorConeExample():
+    """Like it says, just a simple example
+    https://gitlab.kitware.com/vtk/vtk/-/blob/master/Wrapping/Python/vtkmodules/tk/vtkTkRenderWindowInteractor.py
+    """
+
+    from vtkmodules.vtkFiltersSources import vtkConeSource
+    from vtkmodules.vtkRenderingCore import vtkActor, vtkPolyDataMapper, vtkRenderer
+    from vtkmodules.tk.vtkTkRenderWindowInteractor import vtkTkRenderWindowInteractor
+
+    # create root window
+    root = tkinter.Tk()
+
+     # create vtkTkRenderWidget
+    pane = vtkTkRenderWindowInteractor(root, width=300, height=300)
+    pane.Initialize()
+
+    def quit(obj=root):
+        obj.quit()
+
+    pane.AddObserver("ExitEvent", lambda o,e,q=quit: q())
+
+    ren = vtkRenderer()
+    pane.GetRenderWindow().AddRenderer(ren)
+
+    cone = vtkConeSource()
+    cone.SetResolution(8)
+
+    coneMapper = vtkPolyDataMapper()
+    coneMapper.SetInputConnection(cone.GetOutputPort())
+
+    coneActor = vtkActor()
+    coneActor.SetMapper(coneMapper)
+
+    ren.AddActor(coneActor)
+
+    # pack the pane into the tk root
+    pane.pack(fill='both', expand=1)
+    pane.Start()
+
+    # start the tk mainloop
+    root.mainloop()
+
+
+
+
+def wxVTKRenderWindowInteractorConeExample():
+    """Like it says, just a simple example
+    https://discourse.vtk.org/t/interactor-start-blocking-execution/1095/2
+    https://gitlab.kitware.com/vtk/vtk/-/blob/master/Wrapping/Python/vtkmodules/wx/wxVTKRenderWindowInteractor.py
+
+    ipython --gui=wx
+    #gui wx
+    run learn_vtk.py
+    """
+
+    from vtkmodules.vtkFiltersSources import vtkConeSource
+    from vtkmodules.vtkRenderingCore import vtkActor, vtkPolyDataMapper, vtkRenderer
+    from vtkmodules.wx.wxVTKRenderWindowInteractor import wxVTKRenderWindowInteractor
+    import wx
+
+    colors = vtk.vtkNamedColors()
+
+    # every wx app needs an app
+    app = wx.App(False)
+
+    # create the top-level frame, sizer and wxVTKRWI
+    frame = wx.Frame(None, -1, "wxVTKRenderWindowInteractor", size=(400,400))
+    widget = wxVTKRenderWindowInteractor(frame, -1)
+    sizer = wx.BoxSizer(wx.VERTICAL)
+    sizer.Add(widget, 1, wx.EXPAND)
+    frame.SetSizer(sizer)
+    frame.Layout()
+
+    # It would be more correct (API-wise) to call widget.Initialize() and
+    # widget.Start() here, but Initialize() calls RenderWindow.Render().
+    # That Render() call will get through before we can setup the
+    # RenderWindow() to render via the wxWidgets-created context; this
+    # causes flashing on some platforms and downright breaks things on
+    # other platforms.  Instead, we call widget.Enable().  This means
+    # that the RWI::Initialized ivar is not set, but in THIS SPECIFIC CASE,
+    # that doesn't matter.
+    widget.Enable(1)
+
+    widget.AddObserver("ExitEvent", lambda o,e,f=frame: f.Close())
+
+    ren = vtkRenderer()
+    renwin = widget.GetRenderWindow()
+    widget.GetRenderWindow().AddRenderer(ren)
+
+    cone = vtkConeSource()
+    cone.SetResolution(8)
+
+    coneMapper = vtkPolyDataMapper()
+    coneMapper.SetInputConnection(cone.GetOutputPort())
+
+    coneActor = vtkActor()
+    coneActor.SetMapper(coneMapper)
+
+    ren.AddActor(coneActor)
+
+    # show the window
+    frame.Show()
+    # It works!
+    # wx.CallLater(1000*5, lambda : ren.SetBackground(colors.GetColor3d('Blue')))
+    # wx.CallLater(1000*8, lambda : renwin.Render())
+    
+    # colors = vtk.vtkNamedColors()
+    # wx.CallAfter(lambda : ren.SetBackground(colors.GetColor3d('Blue')))
+    # wx.CallAfter(lambda : renwin.Render())
+    
+    def fn():
+       ren.SetBackground(colors.GetColor3d('Blue'))
+       renwin.Render()
+    wx.CallLater(1000*3, fn)
+    
+
+    #app.MainLoop() # comment out to interact in ipython
+    return app, ren, renwin
 
 
 #cylinder()
 #cone()
 #animation()
-box()
+#box()
+#vtkRenderWindowInteractorConeExample() # does not work, missing "vtkRenderingTk-8.90.dll"
+app, ren, renwin = wxVTKRenderWindowInteractorConeExample()
 
 
