@@ -323,17 +323,18 @@ def wxVTKRenderWindowInteractorConeExample():
     # colors = vtk.vtkNamedColors()
     # wx.CallAfter(lambda : ren.SetBackground(colors.GetColor3d('Blue')))
     # wx.CallAfter(lambda : renwin.Render())
-    
+
     def fn():
        ren.SetBackground(colors.GetColor3d('Blue'))
        renwin.Render()
     wx.CallLater(1000*3, fn)
     
 
-    #app.MainLoop() # comment out to interact in ipython
+    app.MainLoop() # comment out to interact in ipython
     return app, ren, renwin
 
 
+print(vtk.vtkVersion.GetVTKVersion())
 #cylinder()
 #cone()
 #animation()
