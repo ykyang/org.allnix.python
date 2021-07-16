@@ -1,6 +1,8 @@
 import vtk
 #import tkinter
 import time
+import threading
+
 # https://kitware.github.io/vtk-examples/site/
 # See vtkInteractorStyle for key binding
 
@@ -86,6 +88,7 @@ def cone():
 
 
 # https://kitware.github.io/vtk-examples/site/Python/Utilities/Animation/
+# https://medium.com/@daniel.stjnv/animation-and-callbacks-with-vtk-dd4bd5e55c13
 class vtkTimerCallback():
     def __init__(self, steps, actor, iren):
         self.timer_count = 0
@@ -210,10 +213,55 @@ def box():
     interactor.Start()
     #time.sleep(10)
     
+def box_thread(renwin):
+    colors = vtk.vtkNamedColors()
+
+    # Create a Cone
+    cone = vtk.vtkConeSource()
+    cone.SetResolution(20)
+    coneMapper = vtk.vtkPolyDataMapper()
+    coneMapper.SetInputConnection(cone.GetOutputPort())
+    coneActor = vtk.vtkActor()
+    coneActor.SetMapper(coneMapper)
+    coneActor.GetProperty().SetColor(colors.GetColor3d('BurlyWood'))
+
+    # A renderer and render window
+    renderer = vtk.vtkRenderer()
+    renderer.SetBackground(colors.GetColor3d('Blue'))
+    renderer.AddActor(coneActor)
+
+    #renwin = vtk.vtkRenderWindow()
+    renwin.AddRenderer(renderer)
+    
+
+    # An interactor
+    interactor = vtk.vtkRenderWindowInteractor()
+    #interactor = vtk.vtkGenericRenderWindowInteractor()
+    interactor.SetRenderWindow(renwin)
+
+    # A Box widget
+    boxWidget = vtk.vtkBoxWidget()
+    boxWidget.SetInteractor(interactor)
+    boxWidget.SetProp3D(coneActor)
+    boxWidget.SetPlaceFactor(1.25)  # Make the box 1.25x larger than the actor
+    boxWidget.PlaceWidget()
+    boxWidget.On()
+
+    # Connect the event to a function
+    # This call makes cone move and stretch with the box.
+    # See complete list of event at 
+    # https://vtk.org/doc/nightly/html/vtkCommand_8h_source.html
+    boxWidget.AddObserver('InteractionEvent', boxCallback)
+    
+    # Start
+    interactor.Initialize()
+    renwin.SetWindowName('BoxWidget')
+    renwin.Render()
+    #time.sleep(2)
+    interactor.Start()
 
 
-
-
+## does not work, missing "vtkRenderingTk-8.90.dll"
 def vtkRenderWindowInteractorConeExample():
     """Like it says, just a simple example
     https://gitlab.kitware.com/vtk/vtk/-/blob/master/Wrapping/Python/vtkmodules/tk/vtkTkRenderWindowInteractor.py
@@ -333,13 +381,72 @@ def wxVTKRenderWindowInteractorConeExample():
     app.MainLoop() # comment out to interact in ipython
     return app, ren, renwin
 
+# Not working, VTK still use gtk, too old?
+def gtkVTKRenderWindowInteractorConeExample():
+    from vtkmodules.vtkFiltersSources import vtkConeSource
+    from vtkmodules.vtkRenderingCore import vtkActor, vtkPolyDataMapper, vtkRenderer
+    from vtkmodules.gtk.GtkVTKRenderWindowInteractor import GtkVTKRenderWindowInteractor
+
+    import gi
+    gi.require_version("Gtk", "3.0")
+    from gi.repository import Gtk as gtk
+
+    # The main window
+    window = gtk.GtkWindow(gtk.WINDOW_TOPLEVEL)
+    window.set_title("A GtkVTKRenderWindow Demo!")
+    window.connect("destroy", gtk.mainquit)
+    window.connect("delete_event", gtk.mainquit)
+    window.set_border_width(10)
+
+    # A VBox into which widgets are packed.
+    vbox = gtk.GtkVBox(spacing=3)
+    window.add(vbox)
+    vbox.show()
+
+    # The GtkVTKRenderWindow
+    gvtk = GtkVTKRenderWindowInteractor()
+    #gvtk.SetDesiredUpdateRate(1000)
+    gvtk.set_usize(400, 400)
+    vbox.pack_start(gvtk)
+    gvtk.show()
+    gvtk.Initialize()
+    gvtk.Start()
+    # prevents 'q' from exiting the app.
+    gvtk.AddObserver("ExitEvent", lambda o,e,x=None: x)
+
+    # The VTK stuff.
+    cone = vtkConeSource()
+    cone.SetResolution(80)
+    coneMapper = vtkPolyDataMapper()
+    coneMapper.SetInputConnection(cone.GetOutputPort())
+    #coneActor = vtkLODActor()
+    coneActor = vtkActor()
+    coneActor.SetMapper(coneMapper)
+    coneActor.GetProperty().SetColor(0.5, 0.5, 1.0)
+    ren = vtkRenderer()
+    gvtk.GetRenderWindow().AddRenderer(ren)
+    ren.AddActor(coneActor)
+
+    # A simple quit button
+    quit = gtk.GtkButton("Quit!")
+    quit.connect("clicked", gtk.mainquit)
+    vbox.pack_start(quit)
+    quit.show()
+
+    # show the main window and start event processing.
+    window.show()
+    gtk.mainloop()
+
+
 
 print(vtk.vtkVersion.GetVTKVersion())
 #cylinder()
 #cone()
 #animation()
 #box()
-#vtkRenderWindowInteractorConeExample() # does not work, missing "vtkRenderingTk-8.90.dll"
-app, ren, renwin = wxVTKRenderWindowInteractorConeExample()
 
-
+#app, ren, renwin = wxVTKRenderWindowInteractorConeExample()
+renwin = vtk.vtkRenderWindow()
+x = threading.Thread(target=box_thread, args=(renwin,))
+x.start() # blocking, why?
+# x.join()
