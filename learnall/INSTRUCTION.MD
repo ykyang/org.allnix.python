@@ -1,4 +1,4 @@
-**<h1>Learn Python from scratch</h1>**
+**<h1>Learn Python from Scratch</h1>**
 
 - [Basic Stuff](#basic-stuff)
   - [Create a script](#create-a-script)
@@ -9,7 +9,7 @@
 # Basic Stuff
 
 ## Create a script
-`hello.py` in `learnall/` for "Hello World".
+Create `hello.py` in `learnall/` for "Hello World".
 
 ## Create a new package
 Create the following 
