@@ -307,7 +307,7 @@ def vtkRenderWindowInteractorConeExample():
 
 
 
-def wxVTKRenderWindowInteractorConeExample():
+def wxVTKRenderWindowInteractorConeExample(db):
     """Like it says, just a simple example
     https://discourse.vtk.org/t/interactor-start-blocking-execution/1095/2
     https://gitlab.kitware.com/vtk/vtk/-/blob/master/Wrapping/Python/vtkmodules/wx/wxVTKRenderWindowInteractor.py
@@ -315,6 +315,10 @@ def wxVTKRenderWindowInteractorConeExample():
     ipython --gui=wx
     #gui wx
     run learn_vtk.py
+    
+    Comment out 
+    app.MainLoop()
+    to run in ipython
     """
 
     from vtkmodules.vtkFiltersSources import vtkConeSource
@@ -334,6 +338,7 @@ def wxVTKRenderWindowInteractorConeExample():
     sizer.Add(widget, 1, wx.EXPAND)
     frame.SetSizer(sizer)
     frame.Layout()
+    db['interactor'] = widget
 
     # It would be more correct (API-wise) to call widget.Initialize() and
     # widget.Start() here, but Initialize() calls RenderWindow.Render().
@@ -345,11 +350,14 @@ def wxVTKRenderWindowInteractorConeExample():
     # that doesn't matter.
     widget.Enable(1)
 
-    widget.AddObserver("ExitEvent", lambda o,e,f=frame: f.Close())
-
     ren = vtkRenderer()
     renwin = widget.GetRenderWindow()
     widget.GetRenderWindow().AddRenderer(ren)
+    db['renderer'] = ren
+    db['render_window'] = renwin
+
+    widget.AddObserver("ExitEvent", lambda o,e: renwin.Finalize())
+    widget.AddObserver("ExitEvent", lambda o,e,f=frame: f.Close())
 
     cone = vtkConeSource()
     cone.SetResolution(8)
@@ -378,8 +386,8 @@ def wxVTKRenderWindowInteractorConeExample():
     wx.CallLater(1000*3, fn)
     
 
-    app.MainLoop() # comment out to interact in ipython
-    return app, ren, renwin
+    #app.MainLoop() # comment out to interact in ipython
+    return wx, app, ren, renwin
 
 # Not working, VTK still use gtk, too old?
 def gtkVTKRenderWindowInteractorConeExample():
@@ -445,8 +453,14 @@ print(vtk.vtkVersion.GetVTKVersion())
 #animation()
 #box()
 
-#app, ren, renwin = wxVTKRenderWindowInteractorConeExample()
-renwin = vtk.vtkRenderWindow()
-x = threading.Thread(target=box_thread, args=(renwin,))
-x.start() # blocking, why?
+db = {}
+colors = vtk.vtkNamedColors()
+wx, app, ren, renwin = wxVTKRenderWindowInteractorConeExample(db)
+#wx.CallAfter(lambda : ren.SetBackground(colors.GetColor3d('Red')))
+#wx.CallAfter(lambda : renwin.Render())
+#wx.CallAfter(lambda : ren.SetBackground(colors.GetColor3d('Blue')))
+
+# renwin = vtk.vtkRenderWindow()
+# x = threading.Thread(target=box_thread, args=(renwin,))
+# x.start() # blocking, why?
 # x.join()
