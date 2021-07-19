@@ -386,7 +386,7 @@ def wxVTKRenderWindowInteractorConeExample(db):
     wx.CallLater(1000*3, fn)
     
 
-    #app.MainLoop() # comment out to interact in ipython
+    app.MainLoop() # comment out to interact in ipython
     return wx, app, ren, renwin
 
 # Not working, VTK still use gtk, too old?
@@ -446,6 +446,53 @@ def gtkVTKRenderWindowInteractorConeExample():
     gtk.mainloop()
 
 
+def QVTKRenderWidgetConeExample():
+    """A simple example that uses the QVTKRenderWindowInteractor class.
+    https://gitlab.kitware.com/vtk/vtk/-/blob/master/Wrapping/Python/vtkmodules/qt/QVTKRenderWindowInteractor.py
+    """
+
+    from vtkmodules.vtkFiltersSources import vtkConeSource
+    from vtkmodules.vtkRenderingCore import vtkActor, vtkPolyDataMapper, vtkRenderer
+    # load implementations for rendering and interaction factory classes
+    #import vtkmodules.vtkRenderingOpenGL2
+    import vtkmodules.vtkInteractionStyle
+    from vtkmodules.qt.QVTKRenderWindowInteractor import QVTKRenderWindowInteractor
+    from PySide2 import QtCore, QtWidgets
+
+    # every QT app needs an app
+    app = QtWidgets.QApplication(['QVTKRenderWindowInteractor'])
+
+    window = QtWidgets.QMainWindow()
+
+    # create the widget
+    widget = QVTKRenderWindowInteractor(window)
+    window.setCentralWidget(widget)
+    # if you don't want the 'q' key to exit comment this.
+    widget.AddObserver("ExitEvent", lambda o, e, a=app: a.quit())
+
+    ren = vtkRenderer()
+    widget.GetRenderWindow().AddRenderer(ren)
+
+    cone = vtkConeSource()
+    cone.SetResolution(8)
+
+    coneMapper = vtkPolyDataMapper()
+    coneMapper.SetInputConnection(cone.GetOutputPort())
+
+    coneActor = vtkActor()
+    coneActor.SetMapper(coneMapper)
+
+    ren.AddActor(coneActor)
+
+    # show the widget
+    window.show()
+
+    widget.Initialize()
+    widget.Start()
+
+    # start event processing
+    app.exec_()
+
 
 print(vtk.vtkVersion.GetVTKVersion())
 #cylinder()
@@ -455,7 +502,7 @@ print(vtk.vtkVersion.GetVTKVersion())
 
 db = {}
 colors = vtk.vtkNamedColors()
-wx, app, ren, renwin = wxVTKRenderWindowInteractorConeExample(db)
+#wx, app, ren, renwin = wxVTKRenderWindowInteractorConeExample(db)
 #wx.CallAfter(lambda : ren.SetBackground(colors.GetColor3d('Red')))
 #wx.CallAfter(lambda : renwin.Render())
 #wx.CallAfter(lambda : ren.SetBackground(colors.GetColor3d('Blue')))
@@ -464,3 +511,5 @@ wx, app, ren, renwin = wxVTKRenderWindowInteractorConeExample(db)
 # x = threading.Thread(target=box_thread, args=(renwin,))
 # x.start() # blocking, why?
 # x.join()
+
+QVTKRenderWidgetConeExample()
