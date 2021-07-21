@@ -41,11 +41,12 @@ def learn_first_app_with_pyside():
 
 #learn_first_app_with_pyside()
 
-
-from PySide2.QtCore import QSize, Qt
+from PySide2 import QtCore
+from PySide2.QtCore import QSize, QTimer, QRunnable, QThreadPool
 from PySide2.QtWidgets import QApplication, QMainWindow, QPushButton, QWidget
 from PySide2.QtWidgets import QLabel, QLineEdit, QVBoxLayout, QMenu, QAction
 from random import choice
+import time
 
 window_titles = [
     'My App',
@@ -138,11 +139,77 @@ class MainWindow2(QMainWindow):
         context.addAction(QAction('Test 3', me))
         context.exec_(event.globalPos())
     
+# Multithreading PyQt applications with QThreadPool
+# https://www.pythonguis.com/tutorials/multithreading-pyqt-applications-qthreadpool/
+class WorkerThread(QRunnable):
+    @QtCore.Slot() # not necessary?
+    def run(me):
+        print('Thread start')
+        time.sleep(5)
+        print('Thread complete')
+class Worker(QRunnable):
+    '''
+    General worker class
+    '''
+    def __init__(me, fn, *args, **kwargs):
+        super().__init__()
+        me.fn = fn
+        me.args = args
+        me.kwargs = kwargs
 
+    @QtCore.Slot()
+    def run(me):
+        me.fn(*me.args, **me.kwargs)
+
+class MainWindowThread(QMainWindow):
+    def __init__(me, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        # Thread pool
+        me.threadpool = QThreadPool()
+        print('Maximum {} threads'.format(me.threadpool.maxThreadCount()))
+
+        me.counter = 0
+
+        layout = QVBoxLayout()
+        me.label = QLabel('Start')
+        danger_button = QPushButton('DANGER!')
+        danger_button.pressed.connect(me.oh_no)
+
+        layout.addWidget(me.label)
+        layout.addWidget(danger_button)
+
+        w = QWidget()
+        w.setLayout(layout)
+
+        me.setCentralWidget(w)
+        me.show()
+
+        timer = me.timer = QTimer()
+        timer.setInterval(1000)
+        timer.timeout.connect(me.recurring_timer)
+        timer.start()
+
+    def oh_no(me):
+        #time.sleep(5)
+        def fn():
+            print('Thread start')
+            time.sleep(5)
+            # sum = 0
+            # for i in range(100000000):
+            #     sum += i
+            print('Thread complete')
+            
+        worker = Worker(fn)
+        me.threadpool.start(worker)
+
+    def recurring_timer(me):
+        me.counter += 1
+        me.label.setText('Counter: {}'.format(me.counter))
 
 import sys
 app = QApplication(sys.argv)
 #window = MainWindow() #QWidget()
-window = MainWindow2()
+#window = MainWindow2()
+window = MainWindowThread()
 window.show()
 app.exec_()
