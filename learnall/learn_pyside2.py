@@ -47,6 +47,8 @@ from PySide2.QtWidgets import QApplication, QMainWindow, QPushButton, QWidget
 from PySide2.QtWidgets import QLabel, QLineEdit, QVBoxLayout, QMenu, QAction
 from random import choice
 import time
+import threading
+from multiprocessing import Process
 
 window_titles = [
     'My App',
@@ -197,10 +199,18 @@ class MainWindowThread(QMainWindow):
             # sum = 0
             # for i in range(100000000):
             #     sum += i
-            print('Thread complete')
+            # print('Thread complete')
             
         worker = Worker(fn)
         me.threadpool.start(worker)
+        
+        # x = threading.Thread(target=fn)
+        # x.start()
+
+        # Cannot pickle error
+        # x = Process(target=fn)
+        # x.start()
+
 
     def recurring_timer(me):
         me.counter += 1
