@@ -3,7 +3,7 @@ from flask import Flask
 
 app = Flask(__name__)
 
-import learnall
+import learnall.vtkservice
 
 def hello():
     import wx
