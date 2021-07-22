@@ -446,6 +446,7 @@ def gtkVTKRenderWindowInteractorConeExample():
     gtk.mainloop()
 
 
+
 def QVTKRenderWidgetConeExample():
     """A simple example that uses the QVTKRenderWindowInteractor class.
     https://gitlab.kitware.com/vtk/vtk/-/blob/master/Wrapping/Python/vtkmodules/qt/QVTKRenderWindowInteractor.py
@@ -458,11 +459,14 @@ def QVTKRenderWidgetConeExample():
     import vtkmodules.vtkInteractionStyle
     from vtkmodules.qt.QVTKRenderWindowInteractor import QVTKRenderWindowInteractor
     from PySide2 import QtCore, QtWidgets
+    from PySide2.QtCore import QTimer
 
     # every QT app needs an app
     app = QtWidgets.QApplication(['QVTKRenderWindowInteractor'])
 
     window = QtWidgets.QMainWindow()
+
+    colors = vtk.vtkNamedColors()
 
     # create the widget
     widget = QVTKRenderWindowInteractor(window)
@@ -470,8 +474,8 @@ def QVTKRenderWidgetConeExample():
     # if you don't want the 'q' key to exit comment this.
     widget.AddObserver("ExitEvent", lambda o, e, a=app: a.quit())
 
-    ren = vtkRenderer()
-    widget.GetRenderWindow().AddRenderer(ren)
+    renderer = vtkRenderer()
+    widget.GetRenderWindow().AddRenderer(renderer)
 
     cone = vtkConeSource()
     cone.SetResolution(8)
@@ -482,12 +486,17 @@ def QVTKRenderWidgetConeExample():
     coneActor = vtkActor()
     coneActor.SetMapper(coneMapper)
 
-    ren.AddActor(coneActor)
+    renderer.AddActor(coneActor)
 
     # show the widget
     window.show()
 
     widget.Initialize()
+    
+    # Use GUI thread to control VTK
+    QTimer.singleShot(3000, lambda : renderer.SetBackground(colors.GetColor3d('Blue')))
+    QTimer.singleShot(6000, lambda : renderer.SetBackground(colors.GetColor3d('Red')))
+    
     widget.Start()
 
     # start event processing
