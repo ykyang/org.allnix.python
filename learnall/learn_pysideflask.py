@@ -1,22 +1,43 @@
 import sys
 from threading import Thread
+import queue
 
 import vtk
 from vtkmodules.qt.QVTKRenderWindowInteractor import QVTKRenderWindowInteractor
 
+from PySide2 import QtCore
+from PySide2.QtCore import QSize, QTimer, QRunnable, QThreadPool
 from PySide2.QtWidgets import QApplication, QMainWindow
 
 from learnall import vtkwindow
 from learnall import fak
+from learnall import config
 
+class Worker(QRunnable):
+    '''
+    General worker class
+    '''
+    def __init__(me, fn, *args, **kwargs):
+        super().__init__()
+        me.fn = fn
+        me.args = args
+        me.kwargs = kwargs
+
+    @QtCore.Slot()
+    def run(me):
+        me.fn(*me.args, **me.kwargs)
+
+# https://www.codegrepper.com/code-examples/python/run+flask+with+pyqt5
 if __name__ == '__main__':
     app = QApplication(sys.argv)
+    #threadpool = QThreadPool()
+    
 
     window = QMainWindow()
 
     colors = vtk.vtkNamedColors()
     
-    vtkwin = vtkwindow.VtkWindow(window)
+    vtkwin = config.vtkwindow = vtkwindow.VtkWindow(window)
     window.setCentralWidget(vtkwin.interactor)
 
     cone = vtk.vtkConeSource()
@@ -35,9 +56,24 @@ if __name__ == '__main__':
     colors = vtk.vtkNamedColors()
     vtkwin.interactor.Initialize()
     vtkwin.interactor.Start()
+    def processvtk():
+        try:
+            fn = config.vtkque.get(block=False)
+            QTimer.singleShot(1, fn())
+        except:
+            pass # ignore
+
+
+    timer = QTimer()
+    timer.setInterval(10)
+    timer.timeout.connect(processvtk)
+    timer.start()
+
 
     kwargs = {'host': '127.0.0.1', 'port': 5000, 'threaded': True, 'use_reloader': False, 'debug': True}
+    #worker = Worker(fak.run, **kwargs)
     fakThread = Thread(target=fak.run, daemon=True, kwargs=kwargs).start()
+    #threadpool.start(worker)
 
     app.exec_()
 

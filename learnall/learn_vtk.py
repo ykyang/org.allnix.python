@@ -523,7 +523,7 @@ def MyVtkClassExample():
     coneActor = vtk.vtkActor()
     coneActor.SetMapper(coneMapper)
 
-    vtkwin.renderer.AddActor(coneActor)
+    vtkwin.add_actor(coneActor)
 
     window.show()
 

@@ -7,6 +7,11 @@ class VtkWindow():
         me.renderer = vtk.vtkRenderer()
         me.window = me.interactor.GetRenderWindow()
         me.window.AddRenderer(me.renderer)
-
+    def add_actor(me, actor):
+        me.renderer.AddActor(actor)
+    def render(me):
+        me.window.Render()
+    
+    
 if __name__ == '__main__':
     print('Hello VTK')
