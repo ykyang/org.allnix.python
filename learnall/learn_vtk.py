@@ -503,6 +503,37 @@ def QVTKRenderWidgetConeExample():
     app.exec_()
 
 
+def MyVtkClassExample():
+    from learnall import vtkwindow
+    from PySide2 import QtCore, QtWidgets
+
+    app = QtWidgets.QApplication(['QVTKRenderWindowInteractor'])
+    window = QtWidgets.QMainWindow()
+    
+
+    vtkwin = vtkwindow.VtkWindow(window)
+    window.setCentralWidget(vtkwin.interactor)
+
+    cone = vtk.vtkConeSource()
+    cone.SetResolution(8)
+
+    coneMapper = vtk.vtkPolyDataMapper()
+    coneMapper.SetInputConnection(cone.GetOutputPort())
+
+    coneActor = vtk.vtkActor()
+    coneActor.SetMapper(coneMapper)
+
+    vtkwin.renderer.AddActor(coneActor)
+
+    window.show()
+
+    colors = vtk.vtkNamedColors()
+    vtkwin.interactor.Initialize()
+    vtkwin.interactor.Start()
+
+    app.exec_()
+
+
 print(vtk.vtkVersion.GetVTKVersion())
 #cylinder()
 #cone()
@@ -521,4 +552,6 @@ colors = vtk.vtkNamedColors()
 # x.start() # blocking, why?
 # x.join()
 
-QVTKRenderWidgetConeExample()
+#QVTKRenderWidgetConeExample()
+MyVtkClassExample()
+
