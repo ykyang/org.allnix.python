@@ -26,6 +26,6 @@ class VtkWindow():
         return job
     
     
-    
+# python -m learnall.vtkwindow
 if __name__ == '__main__':
     print('Hello VTK')
