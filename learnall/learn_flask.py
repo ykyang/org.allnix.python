@@ -1,12 +1,8 @@
-#from flask import Flask
-from learnall import app
+from learnall import fak # Flask object
 
-#app = Flask(__name__)
-
-
-@app.route('/hello')
+@fak.route('/hello')
 def hello():
     return "Hello World!"
 
 if __name__ == '__main__':
-    app.run()
+    fak.run()
