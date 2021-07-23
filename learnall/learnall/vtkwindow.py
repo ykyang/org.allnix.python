@@ -3,6 +3,7 @@ import queue
 import vtk
 from vtkmodules.qt.QVTKRenderWindowInteractor import QVTKRenderWindowInteractor
 
+# https://gitlab.kitware.com/vtk/vtk/-/blob/master/Wrapping/Python/vtkmodules/qt/QVTKRenderWindowInteractor.py
 class VtkWindow():
     def __init__(me, parent):
         me.interactor = QVTKRenderWindowInteractor(parent)

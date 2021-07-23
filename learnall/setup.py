@@ -10,6 +10,7 @@ setup(
     description='A package to learn Python',
     install_requires=[
         'flask',
+        'pyside2',
         'qt',
         'vtk',
     ]

@@ -48,7 +48,8 @@ from PySide2.QtWidgets import QLabel, QLineEdit, QVBoxLayout, QMenu, QAction
 from random import choice
 import time
 import threading
-from multiprocessing import Process
+
+import learnall.pyside2
 
 window_titles = [
     'My App',
@@ -220,6 +221,7 @@ import sys
 app = QApplication(sys.argv)
 #window = MainWindow() #QWidget()
 #window = MainWindow2()
-window = MainWindowThread()
+#window = MainWindowThread()
+window = learnall.pyside2.MainWindow9()
 window.show()
 app.exec_()

@@ -261,6 +261,7 @@ def box_thread(renwin):
     interactor.Start()
 
 
+## Tk
 ## does not work, missing "vtkRenderingTk-8.90.dll"
 def vtkRenderWindowInteractorConeExample():
     """Like it says, just a simple example
@@ -304,9 +305,7 @@ def vtkRenderWindowInteractorConeExample():
     # start the tk mainloop
     root.mainloop()
 
-
-
-
+## WX
 def wxVTKRenderWindowInteractorConeExample(db):
     """Like it says, just a simple example
     https://discourse.vtk.org/t/interactor-start-blocking-execution/1095/2
@@ -389,6 +388,7 @@ def wxVTKRenderWindowInteractorConeExample(db):
     app.MainLoop() # comment out to interact in ipython
     return wx, app, ren, renwin
 
+## GTK
 # Not working, VTK still use gtk, too old?
 def gtkVTKRenderWindowInteractorConeExample():
     from vtkmodules.vtkFiltersSources import vtkConeSource
@@ -446,7 +446,7 @@ def gtkVTKRenderWindowInteractorConeExample():
     gtk.mainloop()
 
 
-
+## Qt
 def QVTKRenderWidgetConeExample():
     """A simple example that uses the QVTKRenderWindowInteractor class.
     https://gitlab.kitware.com/vtk/vtk/-/blob/master/Wrapping/Python/vtkmodules/qt/QVTKRenderWindowInteractor.py
@@ -469,6 +469,8 @@ def QVTKRenderWidgetConeExample():
     colors = vtk.vtkNamedColors()
 
     # create the widget
+    # Use QVTKRenderWindowInteractor(window, rw = vtkRenderWindow())
+    # to supply user defined render window
     widget = QVTKRenderWindowInteractor(window)
     window.setCentralWidget(widget)
     # if you don't want the 'q' key to exit comment this.
@@ -502,15 +504,14 @@ def QVTKRenderWidgetConeExample():
     # start event processing
     app.exec_()
 
-
-def MyVtkClassExample():
+## Use my own VTK window class
+def MyQtVtkClassExample():
     from learnall import vtkwindow
     from PySide2 import QtCore, QtWidgets
 
     app = QtWidgets.QApplication(['QVTKRenderWindowInteractor'])
     window = QtWidgets.QMainWindow()
     
-
     vtkwin = vtkwindow.VtkWindow(window)
     window.setCentralWidget(vtkwin.interactor)
 
@@ -553,5 +554,5 @@ colors = vtk.vtkNamedColors()
 # x.join()
 
 #QVTKRenderWidgetConeExample()
-MyVtkClassExample()
+MyQtVtkClassExample()
 
