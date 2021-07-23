@@ -1,5 +1,5 @@
 # Module level variables
-import queue
+#import queue
 
-vtkque = queue.Queue()
+#vtkque = queue.Queue()
 vtkwindow = None

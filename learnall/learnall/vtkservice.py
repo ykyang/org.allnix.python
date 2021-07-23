@@ -18,12 +18,9 @@ def red():
     vtkwin = config.vtkwindow
     renderer = vtkwin.renderer
     colors = vtk.vtkNamedColors()
-    config.vtkque.put(lambda : renderer.SetBackground(colors.GetColor3d('Red')), block=False)
-    config.vtkque.put(lambda : vtkwin.render())
-    #QTimer.singleShot(1000, lambda : renderer.SetBackground(colors.GetColor3d('Red')))
-    #QTimer.singleShot(2000, lambda : vtkwin.window.Render())
-    # renderer.SetBackground(colors.GetColor3d('Red'))
-    # vtkwin.window.Render()
+
+    vtkwin.put_job(lambda : renderer.SetBackground(colors.GetColor3d('Red')))
+    vtkwin.put_job(lambda : vtkwin.render())
 
     response = fak.make_response('red')
     response.mimetype = "text/plain"
@@ -36,8 +33,8 @@ def black():
     renderer = vtkwin.renderer
     colors = vtk.vtkNamedColors()
 
-    config.vtkque.put(lambda : renderer.SetBackground(colors.GetColor3d('Black')), block=False)
-    config.vtkque.put(lambda : vtkwin.render())
+    vtkwin.put_job(lambda : renderer.SetBackground(colors.GetColor3d('Black')))
+    vtkwin.put_job(lambda : vtkwin.render())
     
     
     response = fak.make_response('black')

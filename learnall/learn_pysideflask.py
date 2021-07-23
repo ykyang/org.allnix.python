@@ -58,10 +58,11 @@ if __name__ == '__main__':
     vtkwin.interactor.Start()
     def processvtk():
         try:
-            fn = config.vtkque.get(block=False)
-            QTimer.singleShot(1, fn())
+            fn = vtkwin.get_job()
+            fn()
+            #QTimer.singleShot(1, fn())
         except:
-            pass # ignore
+            pass # ignore Empty exception
 
 
     timer = QTimer()
@@ -69,11 +70,10 @@ if __name__ == '__main__':
     timer.timeout.connect(processvtk)
     timer.start()
 
-
+    # https://www.codegrepper.com/code-examples/python/run+flask+with+pyqt5
     kwargs = {'host': '127.0.0.1', 'port': 5000, 'threaded': True, 'use_reloader': False, 'debug': True}
-    #worker = Worker(fak.run, **kwargs)
     fakThread = Thread(target=fak.run, daemon=True, kwargs=kwargs).start()
-    #threadpool.start(worker)
+
 
     app.exec_()
 

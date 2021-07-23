@@ -1,3 +1,5 @@
+import queue
+
 import vtk
 from vtkmodules.qt.QVTKRenderWindowInteractor import QVTKRenderWindowInteractor
 
@@ -7,10 +9,22 @@ class VtkWindow():
         me.renderer = vtk.vtkRenderer()
         me.window = me.interactor.GetRenderWindow()
         me.window.AddRenderer(me.renderer)
+        me.job_queue = queue.Queue()
+
     def add_actor(me, actor):
         me.renderer.AddActor(actor)
     def render(me):
         me.window.Render()
+    def put_job(me, job):
+        me.job_queue.put(job, block=False)
+    def get_job(me):
+        try:
+            job = me.job_queue.get(block=False)
+        except:
+            job = lambda : None
+        
+        return job
+    
     
     
 if __name__ == '__main__':
