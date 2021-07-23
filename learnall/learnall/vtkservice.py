@@ -13,6 +13,21 @@ def hellovtk():
     response.mimetype = "text/plain"
     return response
 
+# https://en.wikipedia.org/wiki/Web_colors
+@fak.route('/vtk/v0/background/<string:color>', methods=['PUT'])
+def background(color):
+    vtkwin = config.vtkwindow
+    renderer = vtkwin.renderer
+    colors = vtk.vtkNamedColors()
+
+    vtkwin.put_job(lambda : renderer.SetBackground(colors.GetColor3d(color)))
+    vtkwin.put_job(lambda : vtkwin.render())
+
+    response = fak.make_response(color)
+    response.mimetype = "text/plain"
+    
+    return response
+
 @fak.route('/red')
 def red():
     vtkwin = config.vtkwindow

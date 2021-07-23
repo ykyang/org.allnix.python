@@ -13,25 +13,9 @@ from learnall import vtkwindow
 from learnall import fak
 from learnall import config
 
-class Worker(QRunnable):
-    '''
-    General worker class
-    '''
-    def __init__(me, fn, *args, **kwargs):
-        super().__init__()
-        me.fn = fn
-        me.args = args
-        me.kwargs = kwargs
-
-    @QtCore.Slot()
-    def run(me):
-        me.fn(*me.args, **me.kwargs)
-
 # https://www.codegrepper.com/code-examples/python/run+flask+with+pyqt5
 if __name__ == '__main__':
     app = QApplication(sys.argv)
-    #threadpool = QThreadPool()
-    
 
     window = QMainWindow()
 
