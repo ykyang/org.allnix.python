@@ -1,5 +1,6 @@
 from learnall import fak # Flask object
 
+@fak.route('/')
 @fak.route('/hello')
 def hello():
     return "Hello World!"
