@@ -120,29 +120,29 @@ class MatplotlibWidget(QWidget):
     def __init__(self, parent=None):
         super().__init__(parent)
 
-        self.fig = fig = Figure(figsize=(7, 5), dpi=65, facecolor=(1, 1, 1), edgecolor=(0, 0, 0))
+        self.figure = fig = Figure(figsize=(7, 5), dpi=65, facecolor=(1, 1, 1), edgecolor=(0, 0, 0))
         self.canvas = FigureCanvas(fig)
         self.toolbar = NavigationToolbar(self.canvas, self)
         lay = QVBoxLayout(self)
         lay.addWidget(self.toolbar)
         lay.addWidget(self.canvas)
 
-        self.axes = fig.add_subplot(111)
-        self.line, *_ = self.axes.plot([])
+        # self.axes = fig.add_subplot(111)
+        # self.line, *_ = self.axes.plot([])
 
-    @Slot(list)
-    def update_plot(self, data):
-        self.line.set_data(range(len(data)), data)
+    # @Slot(list)
+    # def update_plot(self, data):
+    #     self.line.set_data(range(len(data)), data)
 
-        self.ax.set_xlim(0, len(data))
-        self.ax.set_ylim(min(data), max(data))
-        self.canvas.draw()
+    #     self.axes.set_xlim(0, len(data))
+    #     self.axes.set_ylim(min(data), max(data))
+    #     self.canvas.draw()
 
 class MplCanvas(FigureCanvasQTAgg):
     def __init__(me, parent=None, width=5, height=4, dpi=100):
-        fig = Figure(figsize=(width, height), dpi=dpi)
-        me.axes = fig.add_subplot(111)
-        super().__init__(fig)
+        me.figure = figure =Figure(figsize=(width, height), dpi=dpi)
+        #me.axes = figure.add_subplot(111)
+        super().__init__(figure)
 
 class MainWindow36(QMainWindow):
     def __init__(me):
@@ -150,8 +150,17 @@ class MainWindow36(QMainWindow):
 
         #sc = MplCanvas(me, width=5, height=4, dpi=100)
         sc = MatplotlibWidget(me)
-        
-        sc.axes.plot([0, 1, 2, 3, 4], [10, 1, 20, 3, 40])
+
+        axes = sc.figure.add_subplot(111)
+        axes.cla()
+        me.plots = axes.plot([0, 1, 2, 3, 4], [10, 1, 20, 3, 40],"r")
+        sc.canvas.draw()
+
+        # replot
+        plot = me.plots[0]
+        plot.set_ydata([1, 2,-1, 2, 3])
+
+
         me.setCentralWidget(sc)
 
         me.show()
