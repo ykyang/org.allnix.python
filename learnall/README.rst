@@ -19,3 +19,11 @@ Resources
 * `reStructuredText Cheat Sheet 
   <https://docutils.sourceforge.io/docs/user/rst/cheatsheet.txt>`_
 * `reStructuredText Cheat Sheet on my gist <https://gist.github.com/ykyang/cf746863e0b91ede1ed473a9469fe1c8>`_
+
+Attribution
+===========
+
+Fugue icons
+-----------
+Some icons by Yusuke Kamiyamane. Licensed under a Creative Commons Attribution 3.0 License.
+https://p.yusukekamiyamane.com/
