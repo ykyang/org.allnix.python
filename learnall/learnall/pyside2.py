@@ -155,7 +155,6 @@ class MainWindow36(QMainWindow):
         axes.cla()
         me.plots = axes.plot([0, 1, 2, 3, 4], [10, 1, 20, 3, 40],"r")
         sc.canvas.draw()
-
         # replot
         plot = me.plots[0]
         plot.set_ydata([1, 2,-1, 2, 3])
