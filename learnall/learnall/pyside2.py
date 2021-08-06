@@ -84,7 +84,6 @@ class MainWindow9(QMainWindow):
         toolbar.addAction(but)
         file_menu.addAction(but)
 
-        
         toolbar.addSeparator()
         file_menu.addSeparator()
 
@@ -94,7 +93,7 @@ class MainWindow9(QMainWindow):
         but.triggered.connect(me.onMyToolBarButtonClick)
         but.setCheckable(True)
         toolbar.addAction(but)
-    
+        
         toolbar.addWidget(QLabel('Hello'))
         toolbar.addWidget(QCheckBox())
         file_menu.addAction(but)
