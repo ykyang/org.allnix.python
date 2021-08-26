@@ -1,3 +1,8 @@
+#
+# The object-oriented interface and the pyplot interface
+# https://matplotlib.org/stable/tutorials/introductory/usage.html#the-object-oriented-interface-and-the-pyplot-interface
+# 
+
 # https://matplotlib.org/stable/tutorials/introductory/usage.html#sphx-glr-tutorials-introductory-usage-py
 
 import matplotlib.pyplot as plt
@@ -6,6 +11,7 @@ import numpy as np
 
 # Interactive mode plt.ion(), plt.ioff()
 
+## Usage Guide
 
 # https://matplotlib.org/stable/tutorials/introductory/usage.html#a-simple-example
 def learn_a_simple_example():
@@ -67,7 +73,8 @@ def my_plotter(ax, data1, data2, param_dict):
     
 
 
-# Pyplot tutorial
+## Pyplot tutorial
+
 # https://matplotlib.org/stable/tutorials/introductory/pyplot.html#sphx-glr-tutorials-introductory-pyplot-py
 def learn_intro_to_pyplot():
     # plt.ion() # interactive mode
@@ -167,6 +174,121 @@ def learn_working_with_text():
     plt.show()
     plt.close()
 
+## Sample plots in Matplotlib
+
+## The Lifecycle of a Plot
+## https://matplotlib.org/stable/tutorials/introductory/lifecycle.html#sphx-glr-tutorials-introductory-lifecycle-py
+## https://pbpython.com/effective-matplotlib.html
+def learn_the_lifecycle_of_a_plot():
+    ## Our data
+    data = {
+        'Barton LLC': 109438.50,
+        'Frami, Hills and Schmidt': 103569.59,
+        'Fritsch, Russel and Anderson': 112214.71,
+        'Jerde-Hilpert': 112591.43,
+        'Keeling LLC': 100934.30,
+        'Koepp Ltd': 103660.54,
+        'Kulas Inc': 137351.96,
+        'Trantow-Barrows': 123381.38,
+        'White-Trantow': 135841.99,
+        'Will LLC': 104437.60
+    }
+
+    group_data = list(data.values())
+    group_names = list(data.keys())
+    group_mean = np.mean(group_data)
+
+    ## Getting started
+    fig, ax = plt.subplots()
+
+    ax.barh(group_names, group_data)
+
+    ## Controlling the style
+    print(plt.style.available)
+    plt.style.use('fivethirtyeight')
+    fig, ax = plt.subplots()
+    ax.barh(group_names, group_data)
+
+    ## Customizing the plot
+    labels = ax.get_xticklabels() # a list of obj
+    print(type(labels))
+    plt.setp(labels, rotation=45, horizontalalignment='right')
+
+    plt.rcParams.update({'figure.autolayout': True})
+    fig, ax = plt.subplots()
+    ax.barh(group_names, group_data)
+    labels = ax.get_xticklabels() # a list of obj
+    plt.setp(labels, rotation=45, horizontalalignment='right')
+    # Labels
+    ax.set(
+        xlim=[-10000,140000],
+        xlabel='Total Revenue',
+        ylabel='Company',
+        title='Company Revenue'
+    )
+    # Plot size
+    fig, ax = plt.subplots(figsize=(8,4))
+    ax.barh(group_names, group_data)
+    labels = ax.get_xticklabels() # a list of obj
+    plt.setp(labels, rotation=45, horizontalalignment='right')
+    # Labels
+    ax.set(
+        xlim=[-10000,140000],
+        xlabel='Total Revenue',
+        ylabel='Company',
+        title='Company Revenue'
+    )
+    # Customize tick label
+    def currency(x, pos):
+        """The args are the value and tick position"""
+        if x >= 1e6:
+            s = '${:1.1f}M'.format(x*1e-6)
+        else:
+            s = '${:1.0f}K'.format(x*1e-3)
+
+        return s
+
+    fig, ax = plt.subplots(figsize=(8,4))
+    ax.barh(group_names, group_data)
+    labels = ax.get_xticklabels() # a list of obj
+    plt.setp(labels, rotation=45, horizontalalignment='right')
+    # Labels
+    ax.set(
+        xlim=[-10000,140000],
+        xlabel='Total Revenue',
+        ylabel='Company',
+        title='Company Revenue'
+    )
+    ax.xaxis.set_major_formatter(currency)
+
+    ## Combining multiple visualizations
+    fig, ax = plt.subplots(figsize=(8,8))
+    ax.barh(group_names, group_data)
+    labels = ax.get_xticklabels()
+    plt.setp(labels, rotation=45, horizontalalignment='right')
+    # Add a vertical line
+    ax.axvline(group_mean, ls='--', color='r')
+    # Annotate new companies
+    for group in [3, 5, 8]: # y-value, 0-based
+        ax.text(145000, group, 'New Company', fontsize=10,
+                verticalalignment='center')
+    # Move title up
+    ax.title.set(y=1.05)
+    ax.set(
+        xlim=[-10000,140000],
+        xlabel='Total Revenue',
+        ylabel='Company',
+        title='Company Revenue'
+    )
+    ax.xaxis.set_major_formatter(currency)
+    ax.set_xticks([0, 25e3, 50e3, 75e3, 100e3, 125e3])
+    fig.subplots_adjust(right=0.1)
+
+    ## Saving our plot
+    print(fig.canvas.get_supported_filetypes())
+    fig.savefig('sales.png', transparent=False, dpi=80, bbox_inches='tight')
+
+
 #learn_a_simple_example()
 #learn_object_oriented_interface()
 #learn_pyplot_interface()
@@ -178,7 +300,8 @@ def learn_working_with_text():
 #learn_plotting_with_categorical_variables()
 #learn_controlling_line_properties()
 #learn_working_with_multiple_figures_and_axes()
-learn_working_with_text()
+#learn_working_with_text()
+learn_the_lifecycle_of_a_plot()
 
 
 plt.show()
