@@ -174,7 +174,45 @@ def learn_working_with_text():
     plt.show()
     plt.close()
 
+
+
 ## Sample plots in Matplotlib
+
+# https://matplotlib.org/stable/gallery/lines_bars_and_markers/simple_plot.html
+def learn_simple_plot():
+    t = np.arange(0.0, 2.0, 0.01)
+    s = 1 + np.sin(2*np.pi*t)
+
+    fig, ax = plt.subplots()
+    ax.plot(t, s)
+
+    ax.set(xlabel='time (s)', ylabel='voltage (mV)',
+           title='About as simple as it gets, folks')
+    ax.grid()
+
+    fig.savefig('test.png')
+
+# https://matplotlib.org/stable/gallery/subplots_axes_and_figures/subplot.html
+def learn_multiple_subplots():
+    fig, (ax1, ax2) = plt.subplots(2,1)
+    fig.suptitle('A tale of 2 subplots')
+    
+    x = np.linspace(0.0, 5.0, num=50)
+    y = np.cos(2 * np.pi * x) * np.exp(-x)
+
+    ax = ax1
+    ax.plot(x, y, 'o-')
+    ax.set_ylabel('Damped oscillation')
+
+    x = np.linspace(0.0,5.0, num =250)
+    y = np.cos(2 * np.pi * x)
+
+    ax = ax2
+    ax.plot(x, y, '.-')
+    ax.set_xlabel('time (s)')
+    ax.set_ylabel('Undamped')
+
+    #print(x1)
 
 ## The Lifecycle of a Plot
 ## https://matplotlib.org/stable/tutorials/introductory/lifecycle.html#sphx-glr-tutorials-introductory-lifecycle-py
@@ -301,7 +339,13 @@ def learn_the_lifecycle_of_a_plot():
 #learn_controlling_line_properties()
 #learn_working_with_multiple_figures_and_axes()
 #learn_working_with_text()
-learn_the_lifecycle_of_a_plot()
+
+## Sample plots in Matplotlib
+#learn_simple_plot()
+learn_multiple_subplots()
+
+
+#learn_the_lifecycle_of_a_plot()
 
 
 plt.show()
