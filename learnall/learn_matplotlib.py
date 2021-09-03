@@ -175,9 +175,14 @@ def learn_working_with_text():
     plt.close()
 
 
+## Tutorials
+## https://matplotlib.org/stable/tutorials/index.html
 
-## Sample plots in Matplotlib
+## Sample plots in Matplotlib    
+## User's Guide » Tutorials » Sample plots in Matplotlib
+## https://matplotlib.org/stable/tutorials/introductory/sample_plots.html
 
+## Simple Plot
 # https://matplotlib.org/stable/gallery/lines_bars_and_markers/simple_plot.html
 def learn_simple_plot():
     t = np.arange(0.0, 2.0, 0.01)
@@ -192,6 +197,7 @@ def learn_simple_plot():
 
     fig.savefig('test.png')
 
+## Multiple subplots
 # https://matplotlib.org/stable/gallery/subplots_axes_and_figures/subplot.html
 def learn_multiple_subplots():
     fig, (ax1, ax2) = plt.subplots(2,1)
@@ -213,6 +219,53 @@ def learn_multiple_subplots():
     ax.set_ylabel('Undamped')
 
     #print(x1)
+
+# https://matplotlib.org/stable/gallery/subplots_axes_and_figures/subplot.html#alternative-method-for-creating-multiple-plots
+def learn_alternative_method_for_creating_multiple_plots():
+    pass
+
+import matplotlib.cm as cm # color map
+
+## Image Demo
+# https://matplotlib.org/stable/gallery/images_contours_and_fields/image_demo.html
+def learn_image_demo_1():
+    np.random.seed(19680801)
+    delta = 0.025
+    x = np.arange(-3, 3, delta)
+    #print(x.flags)
+    y = np.arange(-2, 2, delta)
+    X,Y = np.meshgrid(x,y)
+    #print(X.flags)
+    #Z = X + Y
+    Z1 = np.exp(-X**2 - Y**2)
+    Z2 = np.exp(-(X-1)**2 - (Y-1)**2)
+    Z = (Z1-Z2)*2
+
+    fig,ax = plt.subplots()
+    im = ax.imshow(Z,
+        cmap=cm.RdYlGn,
+        interpolation='bilinear',
+        extent=[-3,3,-2,2],
+        origin='lower',
+        vmax=abs(Z).max(), vmin=-abs(Z).max(),
+    )
+    
+import matplotlib.cbook as cbook
+
+def learn_show_image():
+    # 1
+    with cbook.get_sample_data('grace_hopper.jpg') as image_file:
+        image = plt.imread(image_file)
+    
+    fig,ax = plt.subplots()
+    ax.imshow(image)
+    ax.axis('off')
+
+    # 2
+    with cbook.get_sample_data('s1045.ima.gz') as datafile:
+        s = datafile.read()
+        print(type(s))
+
 
 ## The Lifecycle of a Plot
 ## https://matplotlib.org/stable/tutorials/introductory/lifecycle.html#sphx-glr-tutorials-introductory-lifecycle-py
@@ -342,7 +395,9 @@ def learn_the_lifecycle_of_a_plot():
 
 ## Sample plots in Matplotlib
 #learn_simple_plot()
-learn_multiple_subplots()
+#learn_multiple_subplots()
+#learn_image_demo_1()
+learn_show_image()
 
 
 #learn_the_lifecycle_of_a_plot()
