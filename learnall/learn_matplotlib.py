@@ -73,6 +73,8 @@ def my_plotter(ax, data1, data2, param_dict):
     
 
 
+
+
 ## Pyplot tutorial
 
 # https://matplotlib.org/stable/tutorials/introductory/pyplot.html#sphx-glr-tutorials-introductory-pyplot-py
@@ -174,9 +176,67 @@ def learn_working_with_text():
     plt.show()
     plt.close()
 
+# https://matplotlib.org/stable/tutorials/introductory/pyplot.html#annotating-text
+def learn_annotating_text():
+    fig,ax = plt.subplots()
 
-## Tutorials
-## https://matplotlib.org/stable/tutorials/index.html
+    t = np.arange(0,5,0.01)
+    s = np.cos(2*np.pi*t)
+    line = plt.plot(t, s, lw=2)
+    plt.annotate(
+        'local max', xy=(2,1), xytext=(3,1.5),
+        arrowprops=dict(facecolor='black', shrink=0.1)
+    )
+    plt.ylim(-2, 2)
+    
+# https://matplotlib.org/stable/tutorials/introductory/pyplot.html#logarithmic-and-other-nonlinear-axes
+def learn_logarithmic_and_other_nonlinear_axes():
+    np.random.seed(19680801)
+
+    y = np.random.normal(loc=0.5, scale=0.4, size=1000)
+    y = y[(y > 0) & (y < 1)]
+    y.sort()
+    x = np.arange(len(y))
+
+    fig,axs = plt.subplots(2, 2, figsize=(8,7))
+       
+    # Linear
+    ax = axs[0][0]
+    ax.plot(x, y)
+    ax.set_yscale('linear')
+    ax.set_title('linear')
+    ax.grid(True)
+
+    # Log
+    ax = axs[0][1]
+    ax.plot(x, y)
+    ax.set_yscale('log')
+    ax.set_title('log')
+    ax.grid(True)
+    
+    # symmetric log
+    ax = axs[1][0]
+    ax.plot(x, y - y.mean())
+    ax.set_yscale('symlog', linthresh=0.01)
+    ax.set_title('symlog')
+    ax.grid(True)
+
+    # logit
+    ax = axs[1][1]
+    ax.plot(x, y)
+    ax.set_yscale('logit')
+    ax.set_title('logit')
+    ax.grid(True)
+    
+    # Adjust the subplot layout, because the logit plot may take more space
+    # than usual, due to y-tick labels like "1 - 10^{-3}"
+    fig.subplots_adjust(top=0.92, bottom=0.08, left=0.1, right=0.95, hspace=0.25,wspace=0.35)
+
+
+
+
+# Tutorials
+# https://matplotlib.org/stable/tutorials/index.html
 
 ## Sample plots in Matplotlib    
 ## User's Guide » Tutorials » Sample plots in Matplotlib
@@ -251,20 +311,77 @@ def learn_image_demo_1():
     )
     
 import matplotlib.cbook as cbook
+from matplotlib.path import Path
+from matplotlib.patches import PathPatch
 
+# https://matplotlib.org/stable/gallery/images_contours_and_fields/image_demo.html
 def learn_show_image():
-    # 1
+    # Grace Hopper
     with cbook.get_sample_data('grace_hopper.jpg') as image_file:
         image = plt.imread(image_file)
+        #print(type(image)) # <class 'numpy.ndarray'>
     
     fig,ax = plt.subplots()
     ax.imshow(image)
     ax.axis('off')
 
-    # 2
+    # MRI
+    w,h = 256,256
     with cbook.get_sample_data('s1045.ima.gz') as datafile:
         s = datafile.read()
-        print(type(s))
+        #print(type(s)) # <class 'bytes'>
+    A = np.frombuffer(s, np.uint16).astype(float).reshape((w,h))
+    #print(type(A)) # <class 'numpy.ndarray'>
+    fig,ax = plt.subplots()
+    extent = (0, 25, 0, 25) # <class 'tuple'>
+    im = ax.imshow(A, cmap=plt.cm.hot, origin='upper', extent=extent)
+    #print(type(im)) # <class 'matplotlib.image.AxesImage'>
+
+    markers = [(15.9, 14.5), (16.8, 15)]
+    x,y = zip(*markers) # * unpacks the list
+    ax.plot(x,y,'o')
+    ax.set_title('MRI')
+
+    # Interpolating images
+    # https://matplotlib.org/stable/gallery/images_contours_and_fields/image_demo.html#interpolating-images
+    A = np.random.rand(5,5)
+    fig,axs = plt.subplots(1, 3, figsize=(10,3))
+    for ax,interp in zip(axs, ['nearest', 'bilinear', 'bicubic']):
+        ax.imshow(A, interpolation=interp)
+        ax.set_title(interp.capitalize())
+        ax.grid(True)
+
+    # Origin
+    x = np.arange(120).reshape((10,12))
+    interp = 'bilinear'
+    fig,axs = plt.subplots(nrows=2, sharex=True, figsize=(3,5)) # 3,5 include all axes
+    ax = axs[0]
+    ax.set_title('blue on top, origin=upper')
+    ax.imshow(x, origin='upper', interpolation=interp)
+
+    ax = axs[1]
+    ax.set_title('blue on bottom, origin=lower')
+    ax.imshow(x, origin='lower', interpolation=interp)
+
+    # Clip path
+    delta = 0.25
+    x = y = np.arange(-3, 3, delta)
+    X, Y = np.meshgrid(x, y)
+    Z1 = np.exp(-X**2 - Y**2)
+    Z2 = np.exp(-(X - 1)**2 - (Y - 1)**2)
+    Z = (Z1 - Z2) * 2
+
+    path = Path([[0,1], [1,0], [0,-1], [-1,0], [0,1]])
+    patch = PathPatch(path, facecolor='none')
+
+    fig,ax = plt.subplots()
+    ax.add_patch(patch)
+    im = ax.imshow(
+        Z, interpolation='bilinear', cmap=cm.gray, origin='lower',
+        extent=[-3,3,-3,3], clip_path=patch, clip_on=True
+    )
+    #im.set_clip_path(patch) # What is this for?
+
 
 
 ## The Lifecycle of a Plot
@@ -380,10 +497,20 @@ def learn_the_lifecycle_of_a_plot():
     fig.savefig('sales.png', transparent=False, dpi=80, bbox_inches='tight')
 
 
+# Tutorial
+# https://matplotlib.org/stable/tutorials/index.html#tutorials
+
+
+## Introductory
+# https://matplotlib.org/stable/tutorials/index.html#introductory
+
+## Usage Guide
 #learn_a_simple_example()
 #learn_object_oriented_interface()
 #learn_pyplot_interface()
 
+
+## Pyplot tutorial
 #learn_intro_to_pyplot()
 #learn_formatting_the_style_of_your_plot()
 #learn_formatting_the_style_of_your_plot_2()
@@ -392,15 +519,28 @@ def learn_the_lifecycle_of_a_plot():
 #learn_controlling_line_properties()
 #learn_working_with_multiple_figures_and_axes()
 #learn_working_with_text()
+#learn_annotating_text()
+learn_logarithmic_and_other_nonlinear_axes()
+
 
 ## Sample plots in Matplotlib
 #learn_simple_plot()
 #learn_multiple_subplots()
 #learn_image_demo_1()
-learn_show_image()
-
+#learn_show_image()
 
 #learn_the_lifecycle_of_a_plot()
 
+## Intermediate
 
+## Advanced
+
+## Colors
+# https://matplotlib.org/stable/tutorials/index.html#colors
+
+### Creating Colormaps in Matplotlib
+# https://matplotlib.org/stable/tutorials/colors/colormap-manipulation.html#creating-colormaps-in-matplotlib
+learn_getting_colormaps_and_accessing_their_values()
+
+plt.ion()
 plt.show()
