@@ -497,20 +497,109 @@ def learn_the_lifecycle_of_a_plot():
     fig.savefig('sales.png', transparent=False, dpi=80, bbox_inches='tight')
 
 
+from matplotlib.colors import ListedColormap, LinearSegmentedColormap
+
+# https://matplotlib.org/stable/tutorials/colors/colorbar_only.html#sphx-glr-tutorials-colors-colorbar-only-py
+def learn_basic_continuous_colorbar():
+    fig,ax = plt.subplots(figsize=(6,1))
+    fig.subplots_adjust(bottom=0.5)
+    
+    cmap = mpl.cm.cool
+    norm = mpl.colors.Normalize(vmin=5,vmax=10)
+
+    fig.colorbar(mpl.cm.ScalarMappable(norm=norm, cmap=cmap),
+        cax=ax, orientation='horizontal', label='Some unit'
+    )
+
+# https://matplotlib.org/stable/tutorials/colors/colorbar_only.html#extended-colorbar-with-continuous-colorscale
+def learn_extended_colorbar_with_continuous_colorscale():
+    fig,ax = plt.subplots(figsize=(6,1))
+    fig.subplots_adjust(bottom=0.5)
+
+    cmap = mpl.cm.viridis
+    bounds = [-1, 2, 5, 7, 12, 15]
+    #help(mpl.colors.BoundaryNorm)
+    norm = mpl.colors.BoundaryNorm(bounds, cmap.N, extend='both')
+
+    #help(fig.colorbar)
+    fig.colorbar(mpl.cm.ScalarMappable(norm=norm, cmap=cmap),
+        cax=ax, orientation='horizontal', 
+        label='Discrete intervals'
+    )
+
+def learn_discrete_intervals_colorbar():
+    pass
+
+
+
+
+# https://matplotlib.org/stable/tutorials/colors/colormap-manipulation.html#creating-colormaps-in-matplotlib
+def learn_getting_colormaps_and_accessing_their_values():
+    # ListedColormap
+    viridis = cm.get_cmap('viridis', 8)
+    #print(viridis(0.56)) #(0.122312, 0.633153, 0.530398, 1.0)
+    #print(type(viridis)) #<class 'matplotlib.colors.ListedColormap'>
+    #print('viridis.colors', viridis.colors)
+    # viridis is a callable
+    #print('viridis(range(8))', viridis(range(8)))
+    #print('viridis(np.linspace(0,1,8))', viridis(np.linspace(0,1,8)))
+    # over-sampling
+    #print('viridis(np.linspace(0,1,12))', viridis(np.linspace(0,1,12)))
+
+    # LinearSegmentedColormap
+    copper = cm.get_cmap('copper', 8)
+    #print('copper(range(8))', copper(range(8)))
+
+def learn_creating_listed_colormaps():
+    def plot_examples(colormaps):
+        """
+        Helper function to plot data with associated colormap.
+        """
+        np.random.seed(19680801)
+        data = np.random.randn(30,30)
+        
+        n = len(colormaps)
+        fig,axs = plt.subplots(
+            1, n, 
+            figsize=(n*2+2, 3),
+            constrained_layout=True,
+            squeeze=False,
+        )
+            
+        vmin,vmax = -4, 4
+        for [ax,cmap] in zip(axs.flat, colormaps):
+            psm = ax.pcolormesh(data, cmap=cmap, vmin=vmin, vmax=vmax)
+            fig.colorbar(psm, ax=ax)
+
+    # Create color map by color names
+    cmap = ListedColormap(['darkorange', 'gold', 'lawngreen', 'lightseagreen'])
+    #print(type(cmap)) #<class 'matplotlib.colors.ListedColormap'>
+    plot_examples([cmap])
+
+    # Pink
+    viridis = cm.get_cmap('viridis', 256)
+    newcolors = viridis(np.linspace(0,1,256))
+    pink = np.array([248/256, 24/256, 148/256, 1])
+    newcolors[:25, :] = pink
+    newcmp = ListedColormap(newcolors)
+    plot_examples([viridis, newcmp])
+
 # Tutorial
 # https://matplotlib.org/stable/tutorials/index.html#tutorials
 
 
-## Introductory
+## Tutorial / Introductory
 # https://matplotlib.org/stable/tutorials/index.html#introductory
 
-## Usage Guide
+# Tutorial / Introductory / Usage Guide
+# https://matplotlib.org/stable/tutorials/introductory/usage.html#sphx-glr-tutorials-introductory-usage-py
 #learn_a_simple_example()
 #learn_object_oriented_interface()
 #learn_pyplot_interface()
 
 
-## Pyplot tutorial
+# Tutorial / Introductory / Pyplot tutorial
+# https://matplotlib.org/stable/tutorials/introductory/pyplot.html#sphx-glr-tutorials-introductory-pyplot-py
 #learn_intro_to_pyplot()
 #learn_formatting_the_style_of_your_plot()
 #learn_formatting_the_style_of_your_plot_2()
@@ -520,27 +609,35 @@ def learn_the_lifecycle_of_a_plot():
 #learn_working_with_multiple_figures_and_axes()
 #learn_working_with_text()
 #learn_annotating_text()
-learn_logarithmic_and_other_nonlinear_axes()
+#learn_logarithmic_and_other_nonlinear_axes()
 
 
-## Sample plots in Matplotlib
+# Tutorial / Introductory / Sample plots in Matplotlib
+# https://matplotlib.org/stable/tutorials/introductory/sample_plots.html#sphx-glr-tutorials-introductory-sample-plots-py
 #learn_simple_plot()
 #learn_multiple_subplots()
 #learn_image_demo_1()
 #learn_show_image()
 
+
+# Tutorial / Introductory / The Lifecycle of a Plot
 #learn_the_lifecycle_of_a_plot()
 
-## Intermediate
 
-## Advanced
+# Tutorial / Intermediate
+# Tutorial / Advanced
 
-## Colors
-# https://matplotlib.org/stable/tutorials/index.html#colors
 
-### Creating Colormaps in Matplotlib
+# Tutorial / Colors / Customized Colorbars Tutorial
+# https://matplotlib.org/stable/tutorials/colors/colorbar_only.html#sphx-glr-tutorials-colors-colorbar-only-py
+#learn_basic_continuous_colorbar()
+learn_extended_colorbar_with_continuous_colorscale()
+
+# Tutorial / Colors / Creating Colormaps in Matplotlib
 # https://matplotlib.org/stable/tutorials/colors/colormap-manipulation.html#creating-colormaps-in-matplotlib
-learn_getting_colormaps_and_accessing_their_values()
+#learn_getting_colormaps_and_accessing_their_values()
+#learn_creating_listed_colormaps()
+# TODO: Not done yet
 
 plt.ion()
 plt.show()
