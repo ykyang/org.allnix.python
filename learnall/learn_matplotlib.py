@@ -303,7 +303,7 @@ def learn_image_demo_1():
 
     fig,ax = plt.subplots()
     im = ax.imshow(Z,
-        cmap=cm.RdYlGn,
+        cmap=cm.get_cmap('RdYlGn'), #cm.RdYlGn,
         interpolation='bilinear',
         extent=[-3,3,-2,2],
         origin='lower',
@@ -334,7 +334,7 @@ def learn_show_image():
     #print(type(A)) # <class 'numpy.ndarray'>
     fig,ax = plt.subplots()
     extent = (0, 25, 0, 25) # <class 'tuple'>
-    im = ax.imshow(A, cmap=plt.cm.hot, origin='upper', extent=extent)
+    im = ax.imshow(A, cmap=plt.cm.get_cmap('hot'), origin='upper', extent=extent)
     #print(type(im)) # <class 'matplotlib.image.AxesImage'>
 
     markers = [(15.9, 14.5), (16.8, 15)]
@@ -377,7 +377,7 @@ def learn_show_image():
     fig,ax = plt.subplots()
     ax.add_patch(patch)
     im = ax.imshow(
-        Z, interpolation='bilinear', cmap=cm.gray, origin='lower',
+        Z, interpolation='bilinear', cmap=cm.get_cmap('gray'), origin='lower',
         extent=[-3,3,-3,3], clip_path=patch, clip_on=True
     )
     #im.set_clip_path(patch) # What is this for?
@@ -498,13 +498,30 @@ def learn_the_lifecycle_of_a_plot():
 
 
 from matplotlib.colors import ListedColormap, LinearSegmentedColormap
+import matplotlib.style as mstyle
+
+def learn_cn_color_selection():
+    th = np.linspace(0, 2*np.pi, 128)
+    
+    def demo(sty):
+        mstyle.use(sty)
+        fig,ax = plt.subplots(figsize=(3,3))
+        
+        ax.set_title('style: {}'.format(sty), color='C0')
+        ax.plot(th, np.cos(th), label='cos')#, 'C1', label='C1')
+        ax.plot(th, np.sin(th), label='sin')#, 'C2', label='C2')
+        ax.legend()
+    
+    demo('default')
+    demo('seaborn')
+        
 
 # https://matplotlib.org/stable/tutorials/colors/colorbar_only.html#sphx-glr-tutorials-colors-colorbar-only-py
 def learn_basic_continuous_colorbar():
     fig,ax = plt.subplots(figsize=(6,1))
     fig.subplots_adjust(bottom=0.5)
     
-    cmap = mpl.cm.cool
+    cmap = mpl.cm.get_cmap('cool', 8) #mpl.cm.cool
     norm = mpl.colors.Normalize(vmin=5,vmax=10)
 
     fig.colorbar(mpl.cm.ScalarMappable(norm=norm, cmap=cmap),
@@ -516,7 +533,7 @@ def learn_extended_colorbar_with_continuous_colorscale():
     fig,ax = plt.subplots(figsize=(6,1))
     fig.subplots_adjust(bottom=0.5)
 
-    cmap = mpl.cm.viridis
+    cmap = mpl.cm.get_cmap('viridis')
     bounds = [-1, 2, 5, 7, 12, 15]
     #help(mpl.colors.BoundaryNorm)
     norm = mpl.colors.BoundaryNorm(bounds, cmap.N, extend='both')
@@ -527,9 +544,52 @@ def learn_extended_colorbar_with_continuous_colorscale():
         label='Discrete intervals'
     )
 
-def learn_discrete_intervals_colorbar():
-    pass
 
+
+def learn_discrete_intervals_colorbar():
+    fig,ax = plt.subplots(figsize=(6,1))
+    fig.subplots_adjust(bottom=0.5)
+
+    cmap = mpl.colors.ListedColormap(['red', 'green', 'blue', 'cyan'])
+    #print(type(cmap)) #<class 'matplotlib.colors.ListedColormap'>
+    # '0.25' is a color name for gray, 
+    # see https://matplotlib.org/stable/tutorials/colors/colors.html#specifying-colors
+    cmap = cmap.with_extremes(over='0.25', under='0.75') 
+    #print(type(cmap)) #<class 'matplotlib.colors.ListedColormap'>
+    
+    bounds = [1, 2, 4, 7, 8]
+    norm = mpl.colors.BoundaryNorm(bounds, cmap.N)
+    fig.colorbar(
+        mpl.cm.ScalarMappable(cmap=cmap, norm=norm),
+        cax=ax,
+        boundaries=[0] + bounds + [9], # Adding values for extensions 
+        extend='both',
+        ticks=bounds,
+        spacing='proportional',
+        orientation='horizontal',
+        label='Discrete intervals, some other units',
+    )
+    
+def learn_colorbar_with_custom_extension_lengths():
+    fig,ax = plt.subplots(figsize=(6,1))
+    fig.subplots_adjust(bottom=0.5)
+    
+    cmap = mpl.colors.ListedColormap(['royalblue', 'cyan', 'yellow', 'orange'])
+    cmap = cmap.with_extremes(under='blue', over='red')
+    
+    bounds = [-1, -0.5, 0, 0.5, 1]
+    norm = mpl.colors.BoundaryNorm(bounds, cmap.N)
+    fig.colorbar(
+        mpl.cm.ScalarMappable(cmap=cmap, norm=norm),
+        cax=ax,
+        boundaries=[-2] + bounds + [2],
+        extend='both',
+        extendfrac='auto', ###########
+        ticks=bounds,
+        spacing='uniform',
+        orientation='horizontal',
+        label='Custom extension lengths, some other units',
+    )
 
 
 
@@ -584,6 +644,134 @@ def learn_creating_listed_colormaps():
     newcmp = ListedColormap(newcolors)
     plot_examples([viridis, newcmp])
 
+
+def learn_normalize():
+    norm = mpl.colors.Normalize(vmin=-1, vmax=1)
+    assert 0.5 == norm(0)
+
+import matplotlib.colors as mcolors
+
+def learn_logarithmic():
+    N = 100
+    X,Y = np.mgrid[-3:3:complex(0,N), -2:2:complex(0,N)]
+
+    Z1 = np.exp(-X**2 - Y**2)
+    Z2 = np.exp(-(X*10)**2 - (Y*10)**2)
+    Z = Z1 + 50*Z2
+    
+    fig,axs = plt.subplots(2,1)
+    
+    ax = axs[0]
+    pcm = ax.pcolor(X, Y, Z,
+        norm=mcolors.LogNorm(vmin=Z.min(), vmax=Z.max()),
+        cmap='PuBu_r', shading='auto'
+    )
+    fig.colorbar(pcm, ax=ax, extend='max')
+    
+    ax = axs[1]
+    pcm = ax.pcolor(X, Y, Z, cmap='PuBu_r', shading='auto')
+    fig.colorbar(pcm, ax=ax, extend='max')
+
+def learn_centered():
+    delta = 0.1
+    x = np.arange(-3, 4.001, delta) # [start,stop)
+    y = np.arange(-4, 3.001, delta)
+    X,Y = np.meshgrid(x,y)
+    Z1 = np.exp(-X**2 - Y**2)
+    Z2 = np.exp(-(X-1)**2 - (Y-1)**2)
+    Z = (0.9*Z1 - 0.5*Z2) * 2
+    
+    cmap = cm.get_cmap('coolwarm')
+    
+    fig, axs = plt.subplots(1,2)
+    
+    ax = axs[0]
+    pc = ax.pcolormesh(Z, cmap=cmap)
+    fig.colorbar(pc, ax=ax)
+    ax.set_title('Normalize()')
+       
+    ax = axs[1]
+    pc = ax.pcolormesh(Z, norm=mcolors.CenteredNorm(), cmap=cmap)
+    fig.colorbar(pc, ax=ax)
+    ax.set_title('CenteredNorm()')
+    
+def learn_symmetric_logarithmic():
+    
+
+
+    N = 100
+    X,Y = np.mgrid[-3:3:N*1j, -2:2:N*1j]
+    Z1 = np.exp(-X**2 - Y**2)
+    Z2 = np.exp(-(X-1)**2 - (Y-1)**2)
+    Z = (Z1 - Z2) * 2
+    
+    # Print z-value
+    # https://stackoverflow.com/questions/42577204/show-z-value-at-mouse-pointer-position-in-status-line-with-matplotlibs-pcolorme
+    def format_coord(x, y):    
+        xarr = X[:,0]
+        yarr = Y[0,:]
+        if ((x > xarr.min()) & (x <= xarr.max()) & 
+            (y > yarr.min()) & (y <= yarr.max())):
+            
+            col = np.searchsorted(xarr, x)-1
+            row = np.searchsorted(yarr, y)-1
+            z = Z[row, col]
+            return f'x={x:1.4f}, y={y:1.4f}, z={z:1.4f}   [{row},{col}]'
+        else:
+            return f'x={x:1.4f}, y={y:1.4f}'
+    
+    
+    fig,axs = plt.subplots(2, 1)
+    
+    norm = mcolors.SymLogNorm(vmin=-1, vmax=1, base=10, linthresh=0.03, linscale=0.03)
+    
+    ax = axs[0]
+    pcm = ax.pcolormesh(
+        X, Y, Z,
+        norm=norm,
+        cmap='RdBu_r', shading='auto',
+    )
+    fig.colorbar(pcm, ax=ax, extend='both')
+    ax.format_coord = format_coord
+    
+    ax = axs[1]
+    pcm = ax.pcolormesh(
+        X, Y, Z,
+        cmap='RdBu_r', shading='auto'
+    )
+    fig.colorbar(pcm, ax=ax, extend='both')
+    ax.format_coord = format_coord
+    
+def learn_power_law():
+    N = 100
+    X,Y = np.mgrid[0:3:N*1j, 0:2:N*1j]
+    Z = (1+np.sin(10*Y)) * X**2
+    
+    fig,axs = plt.subplots(2, 1, constrained_layout=True)
+    
+    norm = mcolors.PowerNorm(gamma=0.5) # z = z**gamma
+    
+    ax = axs[0]
+    pcm = ax.pcolormesh(
+        X, Y, Z,
+        norm=norm,
+        cmap='PuBu_r', shading='auto'
+    )
+    fig.colorbar(pcm, ax=ax, extend='max')
+    ax.set_title('PowerNorm()')
+    
+    ax = axs[1]
+    pcm = ax.pcolormesh(X, Y, Z, cmap='PuBu_r', shading='auto')
+    fig.colorbar(pcm, ax=ax, extend='max')
+    ax.set_title('Normalize()')
+    
+    
+class LearnMat():
+    def __init__(me):
+        pass
+    def learn_centered(me):
+        pass
+        
 # Tutorial
 # https://matplotlib.org/stable/tutorials/index.html#tutorials
 
@@ -627,11 +815,15 @@ def learn_creating_listed_colormaps():
 # Tutorial / Intermediate
 # Tutorial / Advanced
 
+# Tutorial / Colors / Specifying Colors
+#learn_cn_color_selection()
 
 # Tutorial / Colors / Customized Colorbars Tutorial
 # https://matplotlib.org/stable/tutorials/colors/colorbar_only.html#sphx-glr-tutorials-colors-colorbar-only-py
 #learn_basic_continuous_colorbar()
-learn_extended_colorbar_with_continuous_colorscale()
+#learn_extended_colorbar_with_continuous_colorscale()
+#learn_discrete_intervals_colorbar()
+#learn_colorbar_with_custom_extension_lengths()
 
 # Tutorial / Colors / Creating Colormaps in Matplotlib
 # https://matplotlib.org/stable/tutorials/colors/colormap-manipulation.html#creating-colormaps-in-matplotlib
@@ -639,5 +831,15 @@ learn_extended_colorbar_with_continuous_colorscale()
 #learn_creating_listed_colormaps()
 # TODO: Not done yet
 
+# Tutorial / Colors / Colormap Normalization
+#learn_normalize()
+#learn_logarithmic()
+#learn_centered()
+#learn_symmetric_logarithmic()
+learn_power_law()
+# TODO: Not done
+
+# comment out for Eclipse
+# uncommnet for ipython
 plt.ion()
 plt.show()
