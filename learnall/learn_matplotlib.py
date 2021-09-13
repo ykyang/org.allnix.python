@@ -765,7 +765,73 @@ def learn_power_law():
     fig.colorbar(pcm, ax=ax, extend='max')
     ax.set_title('Normalize()')
     
+def learn_discrete_bounds():
+    ## Learn how BoundaryNorm works
+    bounds = np.array([-0.25, -0.125, 0, 0.5, 1])
+    norm = mcolors.BoundaryNorm(boundaries=bounds, ncolors=4)
+    #print(norm([-0.3, -0.25, -0.2,-0.125,-0.15,-0.02, 0, 0.3, 0.5, 0.8, 0.99, 1, 1.2]))
+    #           [  -1 0 0 1 0 1 2 2 3 3 3 4 4]
+
+    ## Plot
+    N = 100
+    X,Y = np.meshgrid(np.linspace(-3,3,N), np.linspace(-2,2,N))
+    Z1 = np.exp(-X**2 - Y**2)
+    Z2 = np.exp(-(X-1)**2 - (Y-1)**2)
+    Z = ((Z1-Z2)*2) # Need shading='auto'
+    #Z = ((Z1-Z2)*2)[:-1,:-1] # for shading='flat'
+    print('Zmin,Zmax = {}, {}'.format(Z.min(), Z.max()))
     
+    fig,axs = plt.subplots(2, 2, figsize=(8,6), constrained_layout=True)
+    axs = axs.flatten()
+    
+    # Default norm
+    ax = axs[0]
+    pcm = ax.pcolormesh(X, Y, Z, cmap='RdBu_r', shading='auto')
+    fig.colorbar(pcm, ax=ax, orientation='vertical')
+    ax.set_title('Default norm')
+    
+    # Even bounds give a contour-like effect
+    ax = axs[1]
+    bounds = np.linspace(-1.5, 1.5, 7)
+    norm = mcolors.BoundaryNorm(boundaries=bounds, ncolors=256)
+    pcm = ax.pcolormesh(X, Y, Z, norm=norm, cmap='RdBu_r', shading='auto')
+    fig.colorbar(pcm, ax=ax, extend='both', orientation='vertical')
+    ax.set_title('BoundaryNorm: 7 boundaries')
+    
+    # Bounds may be unevenly spaced
+    ax = axs[2]
+    bounds = np.array([-0.2, -0.1, 0, 0.5, 1])
+    norm = mcolors.BoundaryNorm(boundaries=bounds, ncolors=256)
+    pcm = ax.pcolormesh(X, Y, Z, norm=norm, cmap='RdBu_r', shading='auto')
+    fig.colorbar(pcm, ax=ax, extend='both', orientation='vertical', spacing='proportional')
+    
+    # With out-of-bounds colors
+    ax = axs[3]
+    bounds = np.linspace(-1.5, 1.5, 7)
+    norm = mcolors.BoundaryNorm(boundaries=bounds, ncolors=256, extend='both')
+    pcm = ax.pcolormesh(X, Y, Z, norm=norm, cmap='RdBu_r', shading='auto')
+    # The colorbar inherits the 'extend' argument from BoundaryNorm.
+    fig.colorbar(pcm, ax=ax, orientation='vertical')
+    ax.set_title('BoundaryNorm: extend="both"')
+    
+
+def learn_irregular_xy():
+    np.random.seed(1)
+    
+    x = np.array([1, 1.5, 3, 4, 5, 5.5])
+    y = np.array([-1, 0, 2, 3.6, 4])
+    
+    X,Y = np.meshgrid(x,y)
+    # Do this
+    #Z = np.random.randint(1,11, size=(len(y)-1,len(x)-1))
+    # or this 
+    Z = np.random.randint(1,11, size=(len(y),len(x)))
+    Z = Z[:-1,:-1] # remove last row and column, required by shading='flat'
+    
+    fig,ax = plt.subplots()
+    pcm = ax.pcolormesh(X,Y,Z, shading='flat')
+    fig.colorbar(pcm, ax=ax, orientation='vertical')
+
 class LearnMat():
     def __init__(me):
         pass
@@ -832,14 +898,21 @@ class LearnMat():
 # TODO: Not done yet
 
 # Tutorial / Colors / Colormap Normalization
+# https://matplotlib.org/stable/tutorials/colors/colormapnorms.html#sphx-glr-tutorials-colors-colormapnorms-py
 #learn_normalize()
 #learn_logarithmic()
 #learn_centered()
 #learn_symmetric_logarithmic()
-learn_power_law()
+#learn_power_law()
+#learn_discrete_bounds()
 # TODO: Not done
+
+
+# How to create heat map from irregular xyz data in pyplot?
+# https://stackoverflow.com/questions/43290853/how-to-create-heat-map-from-irregular-xyz-data-in-pyplot
+learn_irregular_xy()
 
 # comment out for Eclipse
 # uncommnet for ipython
-plt.ion()
+#plt.ion()
 plt.show()
