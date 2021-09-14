@@ -814,6 +814,47 @@ def learn_discrete_bounds():
     fig.colorbar(pcm, ax=ax, orientation='vertical')
     ax.set_title('BoundaryNorm: extend="both"')
     
+def learn_twoslopenorm():
+    dem = cbook.get_sample_data('topobathy.npz', np_load=True)
+    #print(type(dem))  #<class 'numpy.lib.npyio.NpzFile'>
+    #print(dem.files)  #['topo', 'longitude', 'latitude']
+    topo      = dem['topo']
+    longitude = dem['longitude']
+    latitude  = dem['latitude']
+    
+    fig,ax = plt.subplots()
+    
+    # Make a colormap that has land and ocean clearly delineated and of 
+    # the same length (256+256)
+    
+    # This is from the tutorial 
+    #colors_undersea = cm.terrain(np.linspace(0, 0.17, 256))
+    ##print(type(colors_undersea))  #<class 'numpy.ndarray'>
+    #with np.printoptions(threshold=np.inf):
+    #    print(colors_undersea)
+    
+    # Get color map then get the colors
+    # Get colors for values 0 - 0.17
+    colors_undersea = cm.get_cmap('terrain', 256)(np.linspace(0, 0.17, 256))
+    # with np.printoptions(threshold=np.inf):
+    #     print(colors_undersea)
+    colors_land = cm.get_cmap('terrain', 256)(np.linspace(0.25, 1, 256))
+    colors_all = np.vstack((colors_undersea, colors_land))
+    #with np.printoptions(threshold=np.inf):
+    #    print(colors_all)
+    terrain_map = mcolors.LinearSegmentedColormap.from_list('terrain_map', colors_all)
+    
+
+    divnorm = mcolors.TwoSlopeNorm(vmin=-500, vcenter=0, vmax=4000)
+    
+    pcm = ax.pcolormesh(longitude, latitude, topo,
+                        rasterized=True, norm=divnorm,
+                        cmap=terrain_map, shading='auto'
+                        )
+    
+    #ax.set_aspect(1/np.cos(np.deg2rad(49)))
+    ax.set_title('TwoSlopeNorm(x)')
+    fig.colorbar(pcm, shrink=0.6)
 
 def learn_irregular_xy():
     np.random.seed(1)
@@ -905,12 +946,13 @@ class LearnMat():
 #learn_symmetric_logarithmic()
 #learn_power_law()
 #learn_discrete_bounds()
+learn_twoslopenorm()
 # TODO: Not done
 
 
 # How to create heat map from irregular xyz data in pyplot?
 # https://stackoverflow.com/questions/43290853/how-to-create-heat-map-from-irregular-xyz-data-in-pyplot
-learn_irregular_xy()
+#learn_irregular_xy()
 
 # comment out for Eclipse
 # uncommnet for ipython
