@@ -873,6 +873,72 @@ def learn_irregular_xy():
     pcm = ax.pcolormesh(X,Y,Z, shading='flat')
     fig.colorbar(pcm, ax=ax, orientation='vertical')
 
+
+def learn_multiple_y_axes():
+    # https://stackoverflow.com/questions/9103166/multiple-axis-in-matplotlib-with-different-scales
+
+    # Create figure and subplot manually
+    # fig = plt.figure()
+    # host = fig.add_subplot(111)
+
+    # More versatile wrapper
+    fig, host = plt.subplots(figsize=(8,5)) # (width, height) in inches
+    # (see https://matplotlib.org/3.3.3/api/_as_gen/matplotlib.pyplot.subplots.html)
+
+    par1 = host.twinx()
+    par2 = host.twinx()
+
+    host.set_xlim(0, 2)
+    host.set_ylim(0, 2)
+    par1.set_ylim(0, 4)
+    par2.set_ylim(1, 65)
+
+    host.set_xlabel("Distance")
+    host.set_ylabel("Density")
+    par1.set_ylabel("Temperature")
+    par2.set_ylabel("Velocity")
+
+    color1 = plt.cm.viridis(0)
+    color2 = plt.cm.viridis(0.5)
+    color3 = plt.cm.viridis(.9)
+
+    p1, = host.plot([0, 1, 2], [0, 1, 2],    color=color1, label="Density")
+    p2, = par1.plot([0, 1, 2], [0, 3, 2],    color=color2, label="Temperature")
+    p3, = par2.plot([0, 1, 2], [50, 30, 15], color=color3, label="Velocity")
+
+    lns = [p1, p2, p3]
+    host.legend(handles=lns, loc='best')
+
+    # right, left, top, bottom
+    par2.spines['right'].set_position(('outward', 60))
+
+    # no x-ticks                 
+    par2.xaxis.set_ticks([])
+
+    # Sometimes handy, same for xaxis
+    #par2.yaxis.set_ticks_position('right')
+
+    # Move "Velocity"-axis to the left
+    # par2.spines['left'].set_position(('outward', 60))
+    # par2.spines['left'].set_visible(True)
+    # par2.yaxis.set_label_position('left')
+    # par2.yaxis.set_ticks_position('left')
+
+    host.yaxis.label.set_color(p1.get_color())
+    par1.yaxis.label.set_color(p2.get_color())
+    par2.yaxis.label.set_color(p3.get_color())
+
+    # Adjust spacings w.r.t. figsize
+    fig.tight_layout()
+    # Alternatively: bbox_inches='tight' within the plt.savefig function 
+    #                (overwrites figsize)
+
+    # Best for professional typesetting, e.g. LaTeX
+    #plt.savefig("pyplot_multiple_y-axis.pdf")
+    # For raster graphics use the dpi argument. E.g. '[...].png", dpi=200)'
+
+
+
 class LearnMat():
     def __init__(me):
         pass
@@ -946,9 +1012,12 @@ class LearnMat():
 #learn_symmetric_logarithmic()
 #learn_power_law()
 #learn_discrete_bounds()
-learn_twoslopenorm()
+#learn_twoslopenorm()
 # TODO: Not done
 
+# Mulitple y-axis
+# https://stackoverflow.com/questions/9103166/multiple-axis-in-matplotlib-with-different-scales
+learn_multiple_y_axes()
 
 # How to create heat map from irregular xyz data in pyplot?
 # https://stackoverflow.com/questions/43290853/how-to-create-heat-map-from-irregular-xyz-data-in-pyplot
